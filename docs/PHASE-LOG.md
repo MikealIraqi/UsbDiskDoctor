@@ -26,33 +26,42 @@
 ## Phase 4 — Health Check ✅
 - **Commits**: dec319b → 80f777f
 - ISmartReader, IFileSystemChecker, IHealthEvaluator
-- 11 اختبار لـ HealthEvaluator
+- 11 اختبار
 
 ## Phase 5 — Diagnostic Engine + Reports ✅
 - **Commits**: fe034ee → e8fff87
-- IDiagnosticEngine + DiagnosticEngine (fail-soft orchestrator)
-- IReportGenerator + JsonReportGenerator + HtmlReportGenerator (RTL عربي)
+- IDiagnosticEngine + DiagnosticEngine
+- IReportGenerator + JsonReportGenerator + HtmlReportGenerator (RTL)
 - WebView2 Report tab + زر "فحص كامل"
-- 9 اختبارات جديدة → 20 إجمالي Diagnostics.Tests
+- 20 اختبار في Diagnostics.Tests
 
 ## Phase 6 — Knowledge Base ✅
-- **Commits**: ce2071c → (هذا الـ commit)
+- **Commits**: ce2071c → d97e8a1
+- IKnowledgeService + JsonKnowledgeService
+- knowledge.json EmbeddedResource (LogicalName صريح)
+- 6 مقالات لكل problem code
+- 9 اختبارات JsonKnowledgeService في Core.Tests
+
+## Phase 7 — Repair Proposals ✅
+- **Commits**: 81bc72f → (هذا الـ commit)
 - **النتيجة**:
-  - IKnowledgeService + JsonKnowledgeService
-  - knowledge.json مُضمَّن كـ EmbeddedResource (LogicalName صريح)
-  - 6 مقالات: SMART_PREDICT_FAILURE, OPERATIONAL_STATUS_ERROR,
-    OPERATIONAL_STATUS_DEGRADED, RAW_FILESYSTEM,
-    FILESYSTEM_CHECK_FAILED, DIRTY_BIT_SET
-  - كل مقال: TitleAr/En, CauseAr/En, SafeActions, DangerousActions,
-    RequiresConfirmation, ExternalSearchKeywords
-  - 9 اختبارات JsonKnowledgeService
+  - IRepairPlanner + RepairPlanner (منطق بحت، لا تنفيذ)
+  - RiskLevel classification rules:
+    * SMART_PREDICT_FAILURE → Dangerous
+    * RAW_FILESYSTEM → Dangerous
+    * OPERATIONAL_STATUS_* → Safe
+    * FILESYSTEM_CHECK_FAILED → Medium
+    * DIRTY_BIT* → Medium
+    * Fallback: article.RequiresConfirmation ? Dangerous : Safe
+  - CommandPreview نصوص وصفيّة فقط (لا Process.Start)
+  - IsExecutableNow = false دائماً
+  - Repair.csproj: TFM → net8.0-windows + refs Diagnostics + Knowledge
+  - 13 اختبار RepairPlanner (Fake IKnowledgeService)
 - **قرارات**:
-  - EmbeddedResource بدلاً من ملف خارجي (يستحيل يضيع)
-  - LogicalName صريح (لا يعتمد على مسار)
-  - Idempotent Load + EnsureLoaded auto
-  - OrdinalIgnoreCase للبحث عن الأكواد
-  - اختبارات Knowledge في Core.Tests (احترام "2 test projects")
-- **التحقق العملي**: GetManifestResourceNames() يرجع الاسم الصحيح
+  - RiskLevel ثابت عبر الكود (rule-based، ليس من Article فقط)
+  - Article يُستخدم للعناوين الوصفية فقط
+  - لا تنفيذ فعلي (المرحلة 8)
+  - Fake KnowledgeService يدوي (بدون Moq)
 
 ---
 
@@ -61,10 +70,12 @@
 
 ---
 
-## Phase 7 — Repair Proposals (قيد التخطيط)
-- **الهدف**: ربط Diagnostics بـ Knowledge لإنتاج RepairProposal
+## Phase 8 — Safe Execution (قيد التخطيط)
+- **الهدف**: تنفيذ الإصلاحات الآمنة بعد موافقة المستخدم
 - **مخطط**:
-  - IRepairPlanner + RepairPlanner
-  - لكل DiagnosticResult مع Code → KnowledgeArticle → RepairProposal
-  - RiskLevel من Article.RequiresConfirmation + Code
-  - عرض في TabDetails
+  - IRepairExecutor + SafeRepairExecutor
+  - Level 1: read-only commands
+  - Level 2: low-risk مع موافقة
+  - Level 3: يحتاج كتابة "FORMAT" صريحة
+  - CommandConfirmationDialog في UI
+  - Audit log لكل عملية
