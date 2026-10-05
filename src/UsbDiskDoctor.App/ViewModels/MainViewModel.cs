@@ -5,16 +5,22 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using UsbDiskDoctor.Core.Models;
 using UsbDiskDoctor.Diagnostics.DeviceDiscovery;
+using UsbDiskDoctor.Diagnostics.DiagnosticEngine;
 using UsbDiskDoctor.Diagnostics.Models;
+using UsbDiskDoctor.Reporting;
 
 namespace UsbDiskDoctor.App.ViewModels
 {
     /// <summary>
-    /// Main view model for the UsbDiskDoctor application, managing device discovery and UI state.
+    /// Main view model for the UsbDiskDoctor application, managing device discovery,
+    /// diagnostics, and report generation.
     /// </summary>
     public sealed partial class MainViewModel : ObservableObject
     {
         private readonly IDeviceDiscoveryService _discoveryService;
+        private readonly IDiagnosticEngine _diagnosticEngine;
+        private readonly HtmlReportGenerator _htmlReportGenerator;
+        private readonly DeviceDetailsViewModel _detailsViewModel;
 
         [ObservableProperty]
         private DeviceSummary? _selectedDevice;
@@ -26,25 +32,35 @@ namespace UsbDiskDoctor.App.ViewModels
         private string _statusMessage = string.Empty;
 
         [ObservableProperty]
-        private DeviceDetailsViewModel _detailsViewModel;
+        private ReportViewModel _reportViewModel;
 
         public ObservableCollection<DeviceSummary> Devices { get; }
 
-        public MainViewModel(IDeviceDiscoveryService discoveryService)
+        public DeviceDetailsViewModel DetailsViewModel => _detailsViewModel;
+
+        public MainViewModel(
+            IDeviceDiscoveryService discoveryService,
+            IDiagnosticEngine diagnosticEngine,
+            HtmlReportGenerator htmlReportGenerator)
         {
             _discoveryService = discoveryService ?? throw new ArgumentNullException(nameof(discoveryService));
+            _diagnosticEngine = diagnosticEngine ?? throw new ArgumentNullException(nameof(diagnosticEngine));
+            _htmlReportGenerator = htmlReportGenerator ?? throw new ArgumentNullException(nameof(htmlReportGenerator));
             Devices = new ObservableCollection<DeviceSummary>();
             _detailsViewModel = new DeviceDetailsViewModel(null);
+            _reportViewModel = new ReportViewModel();
         }
 
         partial void OnSelectedDeviceChanged(DeviceSummary? value)
         {
-            DetailsViewModel = new DeviceDetailsViewModel(value);
+            _detailsViewModel.Device = value;
+            RunFullDiagnosticCommand.NotifyCanExecuteChanged();
         }
 
         partial void OnIsBusyChanged(bool value)
         {
             RefreshCommand.NotifyCanExecuteChanged();
+            RunFullDiagnosticCommand.NotifyCanExecuteChanged();
         }
 
         [RelayCommand(CanExecute = nameof(CanRefresh))]
@@ -79,5 +95,35 @@ namespace UsbDiskDoctor.App.ViewModels
         }
 
         private bool CanRefresh() => !IsBusy;
+
+        [RelayCommand(CanExecute = nameof(CanRunFullDiagnostic))]
+        private async Task RunFullDiagnosticAsync()
+        {
+            var deviceForDiagnostic = SelectedDevice;
+            if (deviceForDiagnostic == null)
+            {
+                return;
+            }
+
+            IsBusy = true;
+            StatusMessage = "جاري الفحص الصحي الشامل...";
+            try
+            {
+                var diagnosticReport = await _diagnosticEngine.DiagnoseAsync(deviceForDiagnostic);
+                var htmlOutput = _htmlReportGenerator.Generate(new[] { diagnosticReport });
+                ReportViewModel.SetContent(htmlOutput);
+                StatusMessage = $"اكتمل الفحص - الحالة: {diagnosticReport.HealthEvaluation.OverallStatus}";
+            }
+            catch (Exception diagnosticException)
+            {
+                StatusMessage = $"خطأ أثناء الفحص: {diagnosticException.Message}";
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        private bool CanRunFullDiagnostic() => SelectedDevice != null && !IsBusy;
     }
 }
