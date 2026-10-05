@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         mc:Ignorable="d"
         Title="UsbDiskDoctor — أداة فحص أقراص USB"
         Width="1000"
@@ -19,6 +20,10 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
             <Button Content="تحديث"
                     Command="{Binding RefreshCommand}"
+                    Padding="20,5"
+                    Margin="0,0,10,0"/>
+            <Button Content="فحص كامل"
+                    Command="{Binding RunFullDiagnosticCommand}"
                     Padding="20,5"
                     Margin="0,0,10,0"/>
             <TextBlock Text="{Binding StatusMessage}"
@@ -141,6 +146,19 @@
 
                     </StackPanel>
                 </ScrollViewer>
+            </TabItem>
+
+            <!-- تبويب: التقرير -->
+            <TabItem Header="التقرير">
+                <Grid>
+                    <wv2:WebView2 x:Name="ReportWebView"/>
+                    <TextBlock Text="لا يوجد تقرير بعد. اختر جهازاً واضغط «فحص كامل»."
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="16"
+                               Foreground="Gray"
+                               x:Name="ReportEmptyHint"/>
+                </Grid>
             </TabItem>
         </TabControl>
 
