@@ -1,7 +1,9 @@
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
-using Microsoft.Web.WebView2.Core;
 using UsbDiskDoctor.App.ViewModels;
+using UsbDiskDoctor.App.Views;
+using UsbDiskDoctor.Core.Models;
 
 namespace UsbDiskDoctor.App
 {
@@ -22,6 +24,7 @@ namespace UsbDiskDoctor.App
 
             Loaded += OnWindowLoaded;
             _viewModel.ReportViewModel.PropertyChanged += OnReportViewModelPropertyChanged;
+            _viewModel.ProposalExecuteRequested += OnProposalExecuteRequested;
         }
 
         private async void OnWindowLoaded(object sender, RoutedEventArgs e)
@@ -37,7 +40,6 @@ namespace UsbDiskDoctor.App
             }
             catch (System.Exception)
             {
-                // WebView2 Runtime may be missing. Fall back to hint text.
                 _webViewInitialized = false;
                 ReportEmptyHint.Text = "محرك WebView2 غير متوفر على هذا النظام. ثبّت WebView2 Runtime لعرض التقرير.";
             }
@@ -69,6 +71,24 @@ namespace UsbDiskDoctor.App
             ReportWebView.NavigateToString(html);
             ReportEmptyHint.Visibility = Visibility.Collapsed;
             ReportWebView.Visibility = Visibility.Visible;
+        }
+
+        private async void OnProposalExecuteRequested(RepairProposal proposal)
+        {
+            var dialog = new ConfirmExecutionDialog(proposal)
+            {
+                Owner = this
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                var targetDriveLetter = _viewModel.SelectedDevice?.Volumes
+                    .Where(v => v.IsMounted && !string.IsNullOrEmpty(v.DriveLetter))
+                    .Select(v => v.DriveLetter)
+                    .FirstOrDefault();
+
+                await _viewModel.ExecuteProposalAsync(proposal, dialog.ConfirmedToken, targetDriveLetter);
+            }
         }
     }
 }

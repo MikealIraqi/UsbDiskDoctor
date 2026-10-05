@@ -5,6 +5,9 @@ using UsbDiskDoctor.Diagnostics.DeviceDiscovery;
 using UsbDiskDoctor.Diagnostics.DiagnosticEngine;
 using UsbDiskDoctor.Diagnostics.HealthChecks;
 using UsbDiskDoctor.Diagnostics.VolumeReading;
+using UsbDiskDoctor.Knowledge.Services;
+using UsbDiskDoctor.Repair.Execution;
+using UsbDiskDoctor.Repair.Planning;
 using UsbDiskDoctor.Reporting;
 
 namespace UsbDiskDoctor.App
@@ -20,18 +23,34 @@ namespace UsbDiskDoctor.App
 
             LoggingSetup.Initialize();
 
-            // Manual DI composition root
+            // Discovery
             var volumeReader = new WmiVolumeReader();
             var discoveryService = new WmiDeviceDiscoveryService(volumeReader);
 
+            // Diagnostics
             var smartReader = new WmiSmartReader();
             var fileSystemChecker = new WmiFileSystemChecker();
             var healthEvaluator = new HealthEvaluator();
             var diagnosticEngine = new DiagnosticEngine(smartReader, fileSystemChecker, healthEvaluator);
 
+            // Knowledge
+            var knowledgeService = new JsonKnowledgeService();
+            knowledgeService.Load();
+
+            // Repair
+            var repairPlanner = new RepairPlanner(knowledgeService);
+            var commandRunner = new ProcessCommandRunner();
+            var repairExecutor = new SafeRepairExecutor(commandRunner);
+
+            // Reporting
             var htmlReportGenerator = new HtmlReportGenerator();
 
-            var mainViewModel = new MainViewModel(discoveryService, diagnosticEngine, htmlReportGenerator);
+            var mainViewModel = new MainViewModel(
+                discoveryService,
+                diagnosticEngine,
+                htmlReportGenerator,
+                repairPlanner,
+                repairExecutor);
             var mainWindow = new MainWindow(mainViewModel);
 
             mainWindow.Show();

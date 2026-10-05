@@ -125,7 +125,7 @@
                         </TextBlock>
 
                         <ListView ItemsSource="{Binding Volumes}"
-                                  MinHeight="120">
+                                  MinHeight="100">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -134,12 +134,48 @@
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="الحرف" DisplayMemberBinding="{Binding DriveLetter}" Width="60"/>
-                                    <GridViewColumn Header="الاسم" DisplayMemberBinding="{Binding Label}" Width="150"/>
+                                    <GridViewColumn Header="الاسم" DisplayMemberBinding="{Binding Label}" Width="140"/>
                                     <GridViewColumn Header="نظام الملفات" DisplayMemberBinding="{Binding FileSystem}" Width="110"/>
                                     <GridViewColumn Header="الحجم (بايت)" DisplayMemberBinding="{Binding SizeBytes}" Width="120"/>
                                     <GridViewColumn Header="متاح (بايت)" DisplayMemberBinding="{Binding FreeSpaceBytes}" Width="120"/>
                                     <GridViewColumn Header="مُثبّت" DisplayMemberBinding="{Binding IsMounted}" Width="70"/>
                                     <GridViewColumn Header="RAW" DisplayMemberBinding="{Binding IsRaw}" Width="60"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+                        <!-- اقتراحات الإصلاح -->
+                        <TextBlock FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Margin="0,20,0,8">
+                            <Run Text="اقتراحات الإصلاح ("/>
+                            <Run Text="{Binding ProposalsCount, Mode=OneWay}"/>
+                            <Run Text=")"/>
+                        </TextBlock>
+
+                        <ListView ItemsSource="{Binding Proposals}"
+                                  MinHeight="120">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="الإجراء" DisplayMemberBinding="{Binding ActionCode}" Width="220"/>
+                                    <GridViewColumn Header="المستوى" DisplayMemberBinding="{Binding RiskLevel}" Width="100"/>
+                                    <GridViewColumn Header="يحتاج تأكيد" DisplayMemberBinding="{Binding RequiresConfirmation}" Width="100"/>
+                                    <GridViewColumn Header="الوصف" DisplayMemberBinding="{Binding DescriptionAr}" Width="300"/>
+                                    <GridViewColumn Header="" Width="100">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Content="تنفيذ"
+                                                        Padding="10,3"
+                                                        Command="{Binding DataContext.RequestExecuteProposalCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        CommandParameter="{Binding}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
                                 </GridView>
                             </ListView.View>
                         </ListView>
