@@ -97,6 +97,45 @@ namespace UsbDiskDoctor.Diagnostics.HealthChecks
                 highestSeverity = MaxSeverity(highestSeverity, Severity.Warning);
             }
 
+            // Device size zero check (hardware failure indicator)
+            if (device.SizeBytes == 0)
+            {
+                var zeroSizeDiagnostic = new DiagnosticResult
+                {
+                    DeviceId = device.DeviceId,
+                    Severity = Severity.Critical,
+                    Code = "DEVICE_SIZE_ZERO",
+                    TitleAr = "حجم الجهاز غير قابل للقراءة",
+                    TitleEn = "Device Size Unreadable",
+                    DescriptionAr = "النظام يُبلغ عن حجم صفر. قد يعني عطلاً هاردويرياً، أو مشكلة في الاتصال، أو وحدة تخزين تالفة.",
+                    DescriptionEn = "The system reports zero size. This may indicate a hardware failure, connection problem, or damaged storage.",
+                    Evidence = new List<string> { "SizeBytes=0" },
+                    RecommendedAction = "تحقق من الكابل والمنفذ. إن استمرت المشكلة، الجهاز معطوب وقد يحتاج استبدالاً."
+                };
+
+                diagnosticsList.Add(zeroSizeDiagnostic);
+                highestSeverity = MaxSeverity(highestSeverity, Severity.Critical);
+            }
+            // No volumes detected (with non-zero size)
+            else if (device.SizeBytes > 0 && (device.Volumes == null || device.Volumes.Count == 0))
+            {
+                var noVolumesDiagnostic = new DiagnosticResult
+                {
+                    DeviceId = device.DeviceId,
+                    Severity = Severity.Warning,
+                    Code = "NO_VOLUMES_DETECTED",
+                    TitleAr = "لا توجد فولومات مكتشفة",
+                    TitleEn = "No Volumes Detected",
+                    DescriptionAr = "لم يتم العثور على فولومات مقروءة على الجهاز. قد يكون غير مهيأ أو نظام الملفات تالف.",
+                    DescriptionEn = "No readable volumes were found on the device. It may be unformatted or have a corrupt file system.",
+                    Evidence = new List<string> { $"SizeBytes={device.SizeBytes}", "Volumes=0" },
+                    RecommendedAction = "افحص الجهاز في Disk Management. لا تعمل فورمات قبل التأكد من البيانات."
+                };
+
+                diagnosticsList.Add(noVolumesDiagnostic);
+                highestSeverity = MaxSeverity(highestSeverity, Severity.Warning);
+            }
+
             // File system checks for each volume
             foreach (var volumeResult in effectiveFileSystemResults)
             {

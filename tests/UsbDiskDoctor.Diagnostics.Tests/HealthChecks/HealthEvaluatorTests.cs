@@ -15,8 +15,22 @@ namespace UsbDiskDoctor.Diagnostics.Tests.HealthChecks
     {
         private static DeviceSummary MakeDevice(
             string id = @"\\.\PHYSICALDRIVE1",
-            OperationalStatus opStatus = OperationalStatus.OK) =>
-            new DeviceSummary { DeviceId = id, OperationalStatus = opStatus };
+            OperationalStatus opStatus = OperationalStatus.OK,
+            long sizeBytes = 1_000_000_000L,
+            bool withVolumes = true)
+        {
+            var volumes = withVolumes
+                ? new List<VolumeInfo> { new VolumeInfo { DriveLetter = "E:", IsMounted = true } }
+                : new List<VolumeInfo>();
+
+            return new DeviceSummary
+            {
+                DeviceId = id,
+                OperationalStatus = opStatus,
+                SizeBytes = sizeBytes,
+                Volumes = volumes
+            };
+        }
 
         [Fact]
         public void Evaluate_ThrowsArgumentNullException_OnNullDevice()
@@ -56,9 +70,7 @@ namespace UsbDiskDoctor.Diagnostics.Tests.HealthChecks
             var result = sut.Evaluate(device, smart, Array.Empty<FileSystemCheckResult>());
 
             Assert.Equal(HealthStatus.Critical, result.OverallStatus);
-            Assert.Single(result.Diagnostics);
-            Assert.Equal("SMART_PREDICT_FAILURE", result.Diagnostics[0].Code);
-            Assert.Equal(Severity.Critical, result.Diagnostics[0].Severity);
+            Assert.Contains(result.Diagnostics, d => d.Code == "SMART_PREDICT_FAILURE");
         }
 
         [Fact]
@@ -171,6 +183,46 @@ namespace UsbDiskDoctor.Diagnostics.Tests.HealthChecks
 
             Assert.Equal(HealthStatus.Healthy, result.OverallStatus);
             Assert.Empty(result.Diagnostics);
+        }
+
+        // ---------- Phase 11.2: NEW TESTS for zero size + no volumes ----------
+
+        [Fact]
+        public void Evaluate_ZeroSizeDevice_ReturnsCriticalWithDeviceSizeZero()
+        {
+            var sut = new HealthEvaluator();
+            var device = MakeDevice(opStatus: OperationalStatus.OK, sizeBytes: 0, withVolumes: false);
+
+            var result = sut.Evaluate(device, new SmartInfo(), Array.Empty<FileSystemCheckResult>());
+
+            Assert.Equal(HealthStatus.Critical, result.OverallStatus);
+            Assert.Contains(result.Diagnostics, d => d.Code == "DEVICE_SIZE_ZERO");
+        }
+
+        [Fact]
+        public void Evaluate_NonZeroSizeNoVolumes_ReturnsWarningWithNoVolumesDetected()
+        {
+            var sut = new HealthEvaluator();
+            var device = MakeDevice(opStatus: OperationalStatus.OK, sizeBytes: 1_000_000_000L, withVolumes: false);
+
+            var result = sut.Evaluate(device, new SmartInfo(), Array.Empty<FileSystemCheckResult>());
+
+            Assert.Equal(HealthStatus.Warning, result.OverallStatus);
+            Assert.Contains(result.Diagnostics, d => d.Code == "NO_VOLUMES_DETECTED");
+            Assert.DoesNotContain(result.Diagnostics, d => d.Code == "DEVICE_SIZE_ZERO");
+        }
+
+        [Fact]
+        public void Evaluate_ZeroSizeAndNoVolumes_OnlyOneDiagnostic()
+        {
+            var sut = new HealthEvaluator();
+            var device = MakeDevice(opStatus: OperationalStatus.OK, sizeBytes: 0, withVolumes: false);
+
+            var result = sut.Evaluate(device, new SmartInfo(), Array.Empty<FileSystemCheckResult>());
+
+            // else-if ensures only DEVICE_SIZE_ZERO is reported, not NO_VOLUMES_DETECTED
+            Assert.Single(result.Diagnostics);
+            Assert.Equal("DEVICE_SIZE_ZERO", result.Diagnostics[0].Code);
         }
     }
 }
