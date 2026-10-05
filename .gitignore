@@ -7,6 +7,9 @@ bld/
 [Bb]in/
 [Oo]bj/
 
+# Publish output
+publish/
+
 # Visual Studio
 .vs/
 *.user
@@ -25,8 +28,6 @@ bld/
 *.nupkg
 *.snupkg
 packages/
-*.dll
-*.exe
 *.log
 
 # UsbDiskDoctor specific
