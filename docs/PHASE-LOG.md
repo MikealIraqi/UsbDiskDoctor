@@ -4,51 +4,60 @@
 
 ---
 
-## Phases 0-8 — ملخص
+## Phases 0-9 — ملخص
 - Setup + Enums + Models + Serilog
 - USB Discovery + MVVM + TabControl
-- Health Check + Diagnostic Engine + Reports (HTML/JSON/WebView2)
+- Health Check + Diagnostics + Reports (HTML/JSON/WebView2)
 - Knowledge Base (6 articles + EmbeddedResource)
 - Repair Planning + Safe Execution (whitelist + token + timeout)
-- **57 اختبار** ناجح قبل Phase 9
+- Basic Recovery (MountedVolumeScanner + SafeFileRestorer + orchestrator)
+- **68 اختبار** ناجح قبل Phase 10
 
 ---
 
-## Phase 9 — Basic Recovery ✅
-- **Commits**: 407bd9e → (هذا الـ commit)
+## Phase 10 — Advanced Recovery ✅
+- **Commits**: 3858ffe → (هذا الـ commit)
 - **النتيجة**:
-  - Models: RecoveryScanMode, RecoveryOptions, RecoveryProgressInfo, RecoveredFileInfo
-  - Scanning: IVolumeScanner + MountedVolumeScanner (read-only enumerate)
-  - Restoring: IFileRestorer + SafeFileRestorer (multi-layer validation)
-  - Service: IRecoveryService + MountedVolumeRecoveryService (orchestrator)
-  - 12 اختبار أمان (بدون file I/O فعلي)
-- **قرارات أمنية**:
-  - **Mounted volume فقط** — لا raw device access في Phase 9
-  - raw device + carving → Phase 10 (يحتاج admin)
-  - SourceFullPath للـ mounted (SourceOffset يبقى للـ raw لاحقاً)
-  - 3 طبقات validation قبل أي كتابة:
-    1. Target ليس داخل Source
-    2. SourceRoot ≠ TargetRoot
-    3. Free space + 1MB buffer
-  - لا File.Delete، لا File.Move، لا overwrite
-  - أسماء فريدة تلقائية: file.jpg → file_1.jpg → file_2.jpg → GUID
-  - لا exceptions تخرج من الطبقات الأمنية (ترجع Failed + رسالة)
-- **ملاحظة UI**: لا Recovery tab بعد — يُضاف في Phase 11 مع UI كامل
-- **التحقق**: 69 اختبار ناجح (26 Core + 43 Diagnostics)
+  - SectorReading: ISectorReader + MemorySectorReader + FileStreamSectorReader
+  - Carving: FileSignature + FileSignatureCatalog + IFileCarver + FileCarver
+  - دعم توقيعات: JPEG (.jpg), PNG (.png), PDF (.pdf)
+  - Chunked scan: 4MB chunks + 64B overlap (signatures across boundaries)
+  - MinFileSizeBytes = 512 (تجنب false positives)
+  - MaxFileSizeBytes = 100MB default (منع runaway)
+  - Infinite-loop protection via `nextPosition <= position` check
+  - Stateless design (all state in local Scan scope)
+  - 10 اختبار FileCarver (MemorySectorReader فقط، لا disk)
+- **قرارات**:
+  - **ISectorReader abstraction** → نختبر carving بـ memory بدون disk
+  - FileAccess.Read فقط في FileStreamSectorReader
+  - لا raw device في Phase 10 (مؤجل — يتطلب admin، غير قابل للاختبار هنا)
+  - SafeFileRestorer يقبل SourceOffset للـ carving (منفصل عن SourceFullPath للمounted)
+- **التحقق**: 78 اختبار ناجح (35 Core + 43 Diagnostics)
 
 ---
 
 ## ⚠️ ملاحظة اختبارية
-**لم يُختبر مع فلاشة USB حقيقية.** Filter `InterfaceType='USB'` قد لا يلتقط UASP HDDs.
-الجهاز الحالي: قرص داخلي واحد فقط (NVMe) — لا يوجد قسم ثانٍ لاختبار restore فعلي.
+**لم يُختبر مع فلاشة USB حقيقية** ولا admin-level raw access.
+الجهاز: قرص NVMe واحد فقط، لا يوجد USB حقيقي.
 
 ---
 
-## Phase 10 — Advanced Recovery (قيد التخطيط)
-- **الهدف**: Raw device + File Carving لأنواع محددة
+## Phase 11 — Polish + UI Completion (قيد التخطيط)
+- **الهدف**: إكمال الواجهة + تحسينات
 - **مخطط**:
-  - `RawDiskReader` (Windows-only، يحتاج Admin)
-  - Sector-level reading (512B/4KB alignment)
-  - Signature detection: JPEG (FF D8 FF), PNG (89 50 4E 47), PDF (%PDF)
-  - File carving من أي مكان في القرص
-  - `IDeepRecoveryService` جديد
+  - Recovery Tab في UI (Scan + Restore)
+  - Report Save button (حفظ HTML/JSON في reports/)
+  - Settings Tab (مسارات افتراضية)
+  - تحسين Styles والألوان
+  - إصلاح filter `InterfaceType='USB'` (يدعم UASP)
+  - أيقونة + تنفيذ .exe
+
+---
+
+## Phase 12 — Final Polish (قيد التخطيط)
+- **الهدف**: التغليف النهائي + الاختبارات
+- **مخطط**:
+  - `dotnet publish` لـ win-x64 single file
+  - README.md شامل
+  - user-guide.md
+  - final test على جهاز نظيف
