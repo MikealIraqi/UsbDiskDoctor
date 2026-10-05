@@ -2,6 +2,7 @@ using System.Windows;
 using UsbDiskDoctor.App.ViewModels;
 using UsbDiskDoctor.Core.Logging;
 using UsbDiskDoctor.Diagnostics.DeviceDiscovery;
+using UsbDiskDoctor.Diagnostics.VolumeReading;
 
 namespace UsbDiskDoctor.App
 {
@@ -17,7 +18,8 @@ namespace UsbDiskDoctor.App
             LoggingSetup.Initialize();
 
             // Manual DI composition root
-            var discoveryService = new WmiDeviceDiscoveryService();
+            var volumeReader = new WmiVolumeReader();
+            var discoveryService = new WmiDeviceDiscoveryService(volumeReader);
             var mainViewModel = new MainViewModel(discoveryService);
             var mainWindow = new MainWindow(mainViewModel);
 

@@ -8,6 +8,7 @@ using Serilog;
 using UsbDiskDoctor.Core.Enums;
 using UsbDiskDoctor.Core.Models;
 using UsbDiskDoctor.Diagnostics.Models;
+using UsbDiskDoctor.Diagnostics.VolumeReading;
 
 namespace UsbDiskDoctor.Diagnostics.DeviceDiscovery
 {
@@ -17,6 +18,12 @@ namespace UsbDiskDoctor.Diagnostics.DeviceDiscovery
     public sealed class WmiDeviceDiscoveryService : IDeviceDiscoveryService
     {
         private static readonly ILogger _log = Log.ForContext<WmiDeviceDiscoveryService>();
+        private readonly IVolumeReader _volumeReader;
+
+        public WmiDeviceDiscoveryService(IVolumeReader volumeReader)
+        {
+            _volumeReader = volumeReader ?? throw new ArgumentNullException(nameof(volumeReader));
+        }
 
         public async Task<IReadOnlyList<DeviceSummary>> DiscoverAsync(
             DiscoveryOptions? options = null,
@@ -26,10 +33,10 @@ namespace UsbDiskDoctor.Diagnostics.DeviceDiscovery
 
             try
             {
-                return await Task.Run(() =>
+                return await Task.Run(async () =>
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-                    return DiscoverDevices(options);
+                    return await DiscoverDevicesAsync(options, cancellationToken);
                 }, cancellationToken);
             }
             catch (OperationCanceledException)
@@ -54,7 +61,9 @@ namespace UsbDiskDoctor.Diagnostics.DeviceDiscovery
             }
         }
 
-        private IReadOnlyList<DeviceSummary> DiscoverDevices(DiscoveryOptions options)
+        private async Task<IReadOnlyList<DeviceSummary>> DiscoverDevicesAsync(
+            DiscoveryOptions options,
+            CancellationToken cancellationToken)
         {
             var query = options.UsbOnly
                 ? "SELECT * FROM Win32_DiskDrive WHERE InterfaceType='USB'"
@@ -67,6 +76,8 @@ namespace UsbDiskDoctor.Diagnostics.DeviceDiscovery
 
             foreach (ManagementObject disk in results)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var status = GetString(disk, "Status");
 
                 if (!options.IncludeOfflineDevices)
@@ -117,7 +128,25 @@ namespace UsbDiskDoctor.Diagnostics.DeviceDiscovery
                 devices.Add(summary);
             }
 
-            return devices.OrderBy(d => d.DeviceId, StringComparer.Ordinal).ToList();
+            var devicesWithVolumes = new List<DeviceSummary>();
+            foreach (var device in devices)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                try
+                {
+                    var volumes = await _volumeReader.ReadVolumesAsync(device.DeviceId, cancellationToken);
+                    var deviceWithVolumes = device with { Volumes = volumes };
+                    devicesWithVolumes.Add(deviceWithVolumes);
+                }
+                catch (Exception ex)
+                {
+                    _log.Warning(ex, "Failed to read volumes for device {DeviceId}. Continuing with empty volumes.", device.DeviceId);
+                    devicesWithVolumes.Add(device);
+                }
+            }
+
+            return devicesWithVolumes.OrderBy(d => d.DeviceId, StringComparer.Ordinal).ToList();
         }
 
         private static string GetString(ManagementBaseObject obj, string propertyName)
