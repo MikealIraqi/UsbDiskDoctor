@@ -14,6 +14,7 @@ namespace UsbDiskDoctor.Diagnostics.DeviceDiscovery
 {
     /// <summary>
     /// Discovers USB storage devices using Windows Management Instrumentation (WMI).
+    /// Supports both direct USB and USB Attached SCSI (UASP) devices.
     /// </summary>
     public sealed class WmiDeviceDiscoveryService : IDeviceDiscoveryService
     {
@@ -65,9 +66,7 @@ namespace UsbDiskDoctor.Diagnostics.DeviceDiscovery
             DiscoveryOptions options,
             CancellationToken cancellationToken)
         {
-            var query = options.UsbOnly
-                ? "SELECT * FROM Win32_DiskDrive WHERE InterfaceType='USB'"
-                : "SELECT * FROM Win32_DiskDrive";
+            var query = "SELECT * FROM Win32_DiskDrive";
 
             var devices = new List<DeviceSummary>();
 
@@ -79,6 +78,13 @@ namespace UsbDiskDoctor.Diagnostics.DeviceDiscovery
                 cancellationToken.ThrowIfCancellationRequested();
 
                 var status = GetString(disk, "Status");
+                var interfaceType = GetString(disk, "InterfaceType");
+                var mediaType = GetString(disk, "MediaType");
+
+                if (options.UsbOnly && !IsUsbLikeDevice(interfaceType, mediaType))
+                {
+                    continue;
+                }
 
                 if (!options.IncludeOfflineDevices)
                 {
@@ -108,20 +114,22 @@ namespace UsbDiskDoctor.Diagnostics.DeviceDiscovery
                 var sizeBytes = GetSizeBytes(disk, "Size");
                 var operationalStatus = MapOperationalStatus(status);
 
+                var busType = DetermineBusType(interfaceType, mediaType);
+
                 var summary = new DeviceSummary
                 {
                     DeviceId = deviceId,
                     FriendlyName = friendlyName,
                     Model = model,
                     SerialNumber = serialNumber,
-                    BusType = BusType.USB,
+                    BusType = busType,
                     MediaType = MediaType.Unknown,
                     PartitionStyle = PartitionStyle.Unknown,
                     SizeBytes = sizeBytes,
                     HealthStatus = HealthStatus.Unknown,
                     OperationalStatus = operationalStatus,
-                    IsUsb = true,
-                    IsExternal = true,
+                    IsUsb = (busType == BusType.USB),
+                    IsExternal = (busType == BusType.USB),
                     Volumes = Array.Empty<VolumeInfo>()
                 };
 
@@ -147,6 +155,48 @@ namespace UsbDiskDoctor.Diagnostics.DeviceDiscovery
             }
 
             return devicesWithVolumes.OrderBy(d => d.DeviceId, StringComparer.Ordinal).ToList();
+        }
+
+        private static bool IsUsbLikeDevice(string interfaceType, string mediaType)
+        {
+            if (string.Equals(interfaceType, "USB", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            if (string.Equals(interfaceType, "SCSI", StringComparison.OrdinalIgnoreCase)
+                && mediaType.IndexOf("External", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private static BusType DetermineBusType(string interfaceType, string mediaType)
+        {
+            if (string.Equals(interfaceType, "USB", StringComparison.OrdinalIgnoreCase))
+            {
+                return BusType.USB;
+            }
+
+            if (string.Equals(interfaceType, "SCSI", StringComparison.OrdinalIgnoreCase)
+                && mediaType.IndexOf("External", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                return BusType.USB;
+            }
+
+            if (string.Equals(interfaceType, "SATA", StringComparison.OrdinalIgnoreCase))
+            {
+                return BusType.SATA;
+            }
+
+            if (string.Equals(interfaceType, "NVMe", StringComparison.OrdinalIgnoreCase))
+            {
+                return BusType.NVMe;
+            }
+
+            return BusType.Unknown;
         }
 
         private static string GetString(ManagementBaseObject obj, string propertyName)
