@@ -1,8 +1,8 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using UsbDiskDoctor.Core.Models;
 using UsbDiskDoctor.Diagnostics.DeviceDiscovery;
 using UsbDiskDoctor.Diagnostics.Models;
@@ -12,53 +12,33 @@ namespace UsbDiskDoctor.App.ViewModels
     /// <summary>
     /// Main view model for the UsbDiskDoctor application, managing device discovery and UI state.
     /// </summary>
-    public sealed class MainViewModel : ViewModelBase
+    public sealed partial class MainViewModel : ObservableObject
     {
         private readonly IDeviceDiscoveryService _discoveryService;
+
+        [ObservableProperty]
         private DeviceSummary? _selectedDevice;
+
+        [ObservableProperty]
         private bool _isBusy;
+
+        [ObservableProperty]
         private string _statusMessage = string.Empty;
+
+        public ObservableCollection<DeviceSummary> Devices { get; }
 
         public MainViewModel(IDeviceDiscoveryService discoveryService)
         {
             _discoveryService = discoveryService ?? throw new ArgumentNullException(nameof(discoveryService));
             Devices = new ObservableCollection<DeviceSummary>();
-            RefreshCommand = new RelayCommand(OnRefreshExecuted, _ => !IsBusy);
         }
 
-        public ObservableCollection<DeviceSummary> Devices { get; }
-
-        public DeviceSummary? SelectedDevice
+        partial void OnIsBusyChanged(bool value)
         {
-            get => _selectedDevice;
-            set => SetProperty(ref _selectedDevice, value);
+            RefreshCommand.NotifyCanExecuteChanged();
         }
 
-        public bool IsBusy
-        {
-            get => _isBusy;
-            set
-            {
-                if (SetProperty(ref _isBusy, value))
-                {
-                    ((RelayCommand)RefreshCommand).RaiseCanExecuteChanged();
-                }
-            }
-        }
-
-        public string StatusMessage
-        {
-            get => _statusMessage;
-            set => SetProperty(ref _statusMessage, value);
-        }
-
-        public ICommand RefreshCommand { get; }
-
-        private async void OnRefreshExecuted(object? parameter)
-        {
-            await RefreshAsync();
-        }
-
+        [RelayCommand(CanExecute = nameof(CanRefresh))]
         private async Task RefreshAsync()
         {
             if (IsBusy) return;
@@ -88,5 +68,7 @@ namespace UsbDiskDoctor.App.ViewModels
                 IsBusy = false;
             }
         }
+
+        private bool CanRefresh() => !IsBusy;
     }
 }

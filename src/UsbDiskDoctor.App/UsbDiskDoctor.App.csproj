@@ -9,6 +9,10 @@
     <ProjectReference Include="..\UsbDiskDoctor.Reporting\UsbDiskDoctor.Reporting.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+  </ItemGroup>
+
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
