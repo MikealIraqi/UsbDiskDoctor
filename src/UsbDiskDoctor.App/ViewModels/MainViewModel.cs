@@ -25,12 +25,21 @@ namespace UsbDiskDoctor.App.ViewModels
         [ObservableProperty]
         private string _statusMessage = string.Empty;
 
+        [ObservableProperty]
+        private DeviceDetailsViewModel _detailsViewModel;
+
         public ObservableCollection<DeviceSummary> Devices { get; }
 
         public MainViewModel(IDeviceDiscoveryService discoveryService)
         {
             _discoveryService = discoveryService ?? throw new ArgumentNullException(nameof(discoveryService));
             Devices = new ObservableCollection<DeviceSummary>();
+            _detailsViewModel = new DeviceDetailsViewModel(null);
+        }
+
+        partial void OnSelectedDeviceChanged(DeviceSummary? value)
+        {
+            DetailsViewModel = new DeviceDetailsViewModel(value);
         }
 
         partial void OnIsBusyChanged(bool value)

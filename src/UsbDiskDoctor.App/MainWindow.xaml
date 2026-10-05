@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="UsbDiskDoctor — أداة فحص أقراص USB"
-        Width="900"
-        Height="600"
+        Width="1000"
+        Height="700"
         WindowStartupLocation="CenterScreen">
-    <Grid x:Name="RootGrid">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -26,25 +26,123 @@
                        FontSize="14"/>
         </StackPanel>
 
-        <!-- قائمة الأجهزة -->
-        <ListView Grid.Row="1"
-                  ItemsSource="{Binding Devices}"
-                  SelectedItem="{Binding SelectedDevice}"
-                  Margin="10">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="اسم الجهاز" DisplayMemberBinding="{Binding FriendlyName}" Width="200"/>
-                    <GridViewColumn Header="معرف الجهاز" DisplayMemberBinding="{Binding DeviceId}" Width="250"/>
-                    <GridViewColumn Header="الحجم (بايت)" DisplayMemberBinding="{Binding SizeBytes}" Width="150"/>
-                    <GridViewColumn Header="الحالة التشغيلية" DisplayMemberBinding="{Binding OperationalStatus}" Width="150"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <!-- التبويبات -->
+        <TabControl Grid.Row="1" Margin="10,0,10,0">
+
+            <!-- تبويب: قائمة الأجهزة -->
+            <TabItem Header="الأجهزة">
+                <ListView ItemsSource="{Binding Devices}"
+                          SelectedItem="{Binding SelectedDevice}"
+                          Margin="5">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="اسم الجهاز" DisplayMemberBinding="{Binding FriendlyName}" Width="220"/>
+                            <GridViewColumn Header="معرف الجهاز" DisplayMemberBinding="{Binding DeviceId}" Width="180"/>
+                            <GridViewColumn Header="الحجم (بايت)" DisplayMemberBinding="{Binding SizeBytes}" Width="150"/>
+                            <GridViewColumn Header="الحالة" DisplayMemberBinding="{Binding OperationalStatus}" Width="130"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </TabItem>
+
+            <!-- تبويب: تفاصيل الجهاز -->
+            <TabItem Header="التفاصيل">
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              DataContext="{Binding DetailsViewModel}">
+                    <StackPanel Margin="15">
+
+                        <TextBlock Text="{Binding FriendlyName}"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,15"/>
+
+                        <TextBlock Text="معلومات عامة"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,8"/>
+
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="معرف الجهاز:" FontWeight="SemiBold" Margin="0,2"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding DeviceIdText}" Margin="0,2"/>
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="الموديل:" FontWeight="SemiBold" Margin="0,2"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ModelText}" Margin="0,2"/>
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="الرقم التسلسلي:" FontWeight="SemiBold" Margin="0,2"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SerialNumberText}" Margin="0,2"/>
+
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="نوع الناقل:" FontWeight="SemiBold" Margin="0,2"/>
+                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding BusTypeText}" Margin="0,2"/>
+
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="نوع الوسائط:" FontWeight="SemiBold" Margin="0,2"/>
+                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding MediaTypeText}" Margin="0,2"/>
+
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="نمط التقسيم:" FontWeight="SemiBold" Margin="0,2"/>
+                            <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding PartitionStyleText}" Margin="0,2"/>
+
+                            <TextBlock Grid.Row="6" Grid.Column="0" Text="الحجم:" FontWeight="SemiBold" Margin="0,2"/>
+                            <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding SizeText}" Margin="0,2"/>
+
+                            <TextBlock Grid.Row="7" Grid.Column="0" Text="الحالة التشغيلية:" FontWeight="SemiBold" Margin="0,2"/>
+                            <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding OperationalStatusText}" Margin="0,2"/>
+
+                            <TextBlock Grid.Row="8" Grid.Column="0" Text="الحالة الصحية:" FontWeight="SemiBold" Margin="0,2"/>
+                            <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding HealthStatusText}" Margin="0,2"/>
+                        </Grid>
+
+                        <TextBlock FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Margin="0,10,0,8">
+                            <Run Text="الفوليومات ("/>
+                            <Run Text="{Binding VolumesCountText, Mode=OneWay}"/>
+                            <Run Text=")"/>
+                        </TextBlock>
+
+                        <ListView ItemsSource="{Binding Volumes}"
+                                  MinHeight="120">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="الحرف" DisplayMemberBinding="{Binding DriveLetter}" Width="60"/>
+                                    <GridViewColumn Header="الاسم" DisplayMemberBinding="{Binding Label}" Width="150"/>
+                                    <GridViewColumn Header="نظام الملفات" DisplayMemberBinding="{Binding FileSystem}" Width="110"/>
+                                    <GridViewColumn Header="الحجم (بايت)" DisplayMemberBinding="{Binding SizeBytes}" Width="120"/>
+                                    <GridViewColumn Header="متاح (بايت)" DisplayMemberBinding="{Binding FreeSpaceBytes}" Width="120"/>
+                                    <GridViewColumn Header="مُثبّت" DisplayMemberBinding="{Binding IsMounted}" Width="70"/>
+                                    <GridViewColumn Header="RAW" DisplayMemberBinding="{Binding IsRaw}" Width="60"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
 
         <!-- شريط الحالة -->
         <StatusBar Grid.Row="2">
