@@ -30,7 +30,7 @@ namespace UsbDiskDoctor.Recovery.Services
         public async Task<IReadOnlyList<RecoveredFileInfo>> ScanAsync(
             string sourceVolume,
             RecoveryOptions options,
-            IProgress<RecoveryProgressInfo>? progress,
+            IProgress<RecoveryProgressInfo>? progress = null,
             CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(sourceVolume))
@@ -56,7 +56,7 @@ namespace UsbDiskDoctor.Recovery.Services
             string sourceVolume,
             IReadOnlyList<RecoveredFileInfo> files,
             string targetFolder,
-            IProgress<RecoveryProgressInfo>? progress,
+            IProgress<RecoveryProgressInfo>? progress = null,
             CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(sourceVolume))

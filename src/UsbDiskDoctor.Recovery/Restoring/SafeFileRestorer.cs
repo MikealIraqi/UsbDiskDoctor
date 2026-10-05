@@ -23,7 +23,7 @@ namespace UsbDiskDoctor.Recovery.Restoring
             string sourceVolumeRoot,
             IReadOnlyList<RecoveredFileInfo> files,
             string targetFolder,
-            IProgress<RecoveryProgressInfo>? progress,
+            IProgress<RecoveryProgressInfo>? progress = null,
             CancellationToken cancellationToken = default)
         {
             // -------- Input validation --------

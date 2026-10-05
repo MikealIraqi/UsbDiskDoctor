@@ -1,55 +1,54 @@
 # UsbDiskDoctor — Phase Log
 
-سجل مختصر لكل مرحلة مكتملة. يُقرأ عند بدء محادثة جديدة.
+سجل مختصر لكل مرحلة مكتملة.
 
 ---
 
-## Phase 0-7 — ملخص
+## Phases 0-8 — ملخص
 - Setup + Enums + Models + Serilog
 - USB Discovery + MVVM + TabControl
-- Health Check (SMART + FS + Evaluator)
-- Diagnostic Engine + Reports (HTML + JSON + WebView2)
+- Health Check + Diagnostic Engine + Reports (HTML/JSON/WebView2)
 - Knowledge Base (6 articles + EmbeddedResource)
-- Repair Proposals (rule-based RiskLevel)
-- **47 اختبار** ناجح قبل Phase 8
+- Repair Planning + Safe Execution (whitelist + token + timeout)
+- **57 اختبار** ناجح قبل Phase 9
 
 ---
 
-## Phase 8 — Safe Execution ✅
-- **Commits**: b8ecbda → (هذا الـ commit)
+## Phase 9 — Basic Recovery ✅
+- **Commits**: 407bd9e → (هذا الـ commit)
 - **النتيجة**:
-  - ICommandRunner + ProcessCommandRunner (secure process execution)
-  - IRepairExecutor + SafeRepairExecutor (whitelist-based execution)
-  - ConfirmExecutionDialog (WPF modal dialog)
-  - Full wiring: MainViewModel → ConfirmDialog → SafeRepairExecutor
-  - 10 اختبار SafeRepairExecutor (FakeCommandRunner)
+  - Models: RecoveryScanMode, RecoveryOptions, RecoveryProgressInfo, RecoveredFileInfo
+  - Scanning: IVolumeScanner + MountedVolumeScanner (read-only enumerate)
+  - Restoring: IFileRestorer + SafeFileRestorer (multi-layer validation)
+  - Service: IRecoveryService + MountedVolumeRecoveryService (orchestrator)
+  - 12 اختبار أمان (بدون file I/O فعلي)
 - **قرارات أمنية**:
-  - UseShellExecute = false (منع shell injection)
-  - Timeout مع Kill(entireProcessTree: true)
-  - Whitelist صارم — ActionCode فقط من قاموس داخلي
-  - Risk match + Token exact-ordinal + Drive letter check
-  - Args تُبنى من ArgumentsTemplate فقط — CommandPreview لا يُنفذ
-  - chkdsk بمسار كامل من Environment.SystemDirectory
-  - Truncation 8KB لكل output stream
-- **الـ Actions المتاحة حالياً (Whitelist)**:
-  - OPERATIONAL_STATUS_ERROR → informational (Safe)
-  - OPERATIONAL_STATUS_DEGRADED → informational (Safe)
-  - FILESYSTEM_CHECK_FAILED → informational (Medium + CONFIRM)
-  - DIRTY_BIT_SET → chkdsk.exe <drive> /scan (Medium + CONFIRM + DriveLetter)
-- **التحقق**: 57 اختبار ناجح (14 Core + 43 Diagnostics)
+  - **Mounted volume فقط** — لا raw device access في Phase 9
+  - raw device + carving → Phase 10 (يحتاج admin)
+  - SourceFullPath للـ mounted (SourceOffset يبقى للـ raw لاحقاً)
+  - 3 طبقات validation قبل أي كتابة:
+    1. Target ليس داخل Source
+    2. SourceRoot ≠ TargetRoot
+    3. Free space + 1MB buffer
+  - لا File.Delete، لا File.Move، لا overwrite
+  - أسماء فريدة تلقائية: file.jpg → file_1.jpg → file_2.jpg → GUID
+  - لا exceptions تخرج من الطبقات الأمنية (ترجع Failed + رسالة)
+- **ملاحظة UI**: لا Recovery tab بعد — يُضاف في Phase 11 مع UI كامل
+- **التحقق**: 69 اختبار ناجح (26 Core + 43 Diagnostics)
 
 ---
 
 ## ⚠️ ملاحظة اختبارية
-**لم يُختبر مع فلاشة USB حقيقية.** Filter InterfaceType='USB' قد لا يلتقط UASP HDDs. مؤجل لـ Phase 12.
+**لم يُختبر مع فلاشة USB حقيقية.** Filter `InterfaceType='USB'` قد لا يلتقط UASP HDDs.
+الجهاز الحالي: قرص داخلي واحد فقط (NVMe) — لا يوجد قسم ثانٍ لاختبار restore فعلي.
 
 ---
 
-## Phase 9 — Basic Recovery (قيد التخطيط)
-- **الهدف**: استعادة ملفات أساسية من أقراص USB
+## Phase 10 — Advanced Recovery (قيد التخطيط)
+- **الهدف**: Raw device + File Carving لأنواع محددة
 - **مخطط**:
-  - IRecoveryService + ScanMode (Quick/Deep)
-  - File carving بسيط لأنواع محددة (JPEG/PNG/PDF)
-  - قيد صارم: لا استعادة على نفس القرص المصدر
-  - التحقق من مساحة القرص الهدف
-  - RecoverySession tracking
+  - `RawDiskReader` (Windows-only، يحتاج Admin)
+  - Sector-level reading (512B/4KB alignment)
+  - Signature detection: JPEG (FF D8 FF), PNG (89 50 4E 47), PDF (%PDF)
+  - File carving من أي مكان في القرص
+  - `IDeepRecoveryService` جديد
