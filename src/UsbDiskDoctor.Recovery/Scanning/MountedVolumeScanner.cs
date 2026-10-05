@@ -88,6 +88,7 @@ namespace UsbDiskDoctor.Recovery.Scanning
                             Extension = fileExtension ?? string.Empty,
                             SizeBytes = fileInfo.Length,
                             SourceOffset = 0,
+                            SourceFullPath = filePath,
                             TargetFullPath = string.Empty
                         };
 

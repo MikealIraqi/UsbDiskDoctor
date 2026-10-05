@@ -22,8 +22,15 @@ namespace UsbDiskDoctor.Recovery.Models
 
         /// <summary>
         /// Starting offset on the source disk where the file data begins.
+        /// Used for raw-device recovery (Phase 10). Zero for mounted volume scans.
         /// </summary>
         public long SourceOffset { get; init; } = 0;
+
+        /// <summary>
+        /// Absolute path of the source file on the mounted volume.
+        /// Empty for raw-device recovery (Phase 10).
+        /// </summary>
+        public string SourceFullPath { get; init; } = string.Empty;
 
         /// <summary>
         /// Full path where the file will be restored (set during restore operation).
