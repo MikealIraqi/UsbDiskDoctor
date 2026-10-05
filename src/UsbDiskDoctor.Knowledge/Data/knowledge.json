@@ -134,4 +134,55 @@
       "chkdsk dirty bit NTFS"
     ]
   }
+,
+  {
+    "code": "DEVICE_SIZE_ZERO",
+    "titleAr": "حجم الجهاز غير قابل للقراءة (عطل هاردويري محتمل)",
+    "titleEn": "Device Size Unreadable (Likely Hardware Failure)",
+    "causeAr": "النظام يُبلغ عن حجم صفر. الأسباب المحتملة: أكسدة في PCB، تلف في service area، read heads متضررة، أو motor يعمل بشكل غير مستقر.",
+    "causeEn": "The system reports zero size. Possible causes: PCB oxidation, service area damage, damaged read heads, or unstable motor operation.",
+    "safeActions": [
+      "أوقف الاستخدام فوراً وافصل الجهاز.",
+      "لا تحاول فحصاً مكثفاً أو كتابة.",
+      "تأكد من الكابل والمنفذ (احتمال ضعيف).",
+      "إذا كنت تقني هاردوير: افحص PCB بحثاً عن أكسدة أو انتفاخ في المكثفات.",
+      "إن لم تُحل المشكلة، اتصل بمختص استعادة بيانات في clean room."
+    ],
+    "dangerousActions": [
+      "الاستمرار في توصيل الجهاز (يُزيد الضرر).",
+      "محاولة chkdsk أو فورمات (لا فائدة، وقد تُدمّر البنية المتبقية).",
+      "فتح العلبة والقرص يعمل."
+    ],
+    "requiresConfirmation": true,
+    "externalSearchKeywords": [
+      "USB drive size 0",
+      "external HDD not detected Windows",
+      "hard drive PCB cleaning",
+      "clean room data recovery"
+    ]
+  },
+  {
+    "code": "NO_VOLUMES_DETECTED",
+    "titleAr": "لا توجد فولومات مكتشفة",
+    "titleEn": "No Volumes Detected",
+    "causeAr": "الجهاز له حجم معروف لكن بدون فولومات مقروءة. الأسباب المحتملة: نظام ملفات RAW، جدول partitions تالف، أو لم تُهيأ بعد.",
+    "causeEn": "The device has a known size but no readable volumes. Possible causes: RAW file system, corrupted partition table, or not yet initialized.",
+    "safeActions": [
+      "افتح Disk Management للتحقق من الحالة.",
+      "إن كانت البيانات مهمة، لا تعمل فورمات.",
+      "جرّب أداة استعادة مثل TestDisk لفحص جدول partitions.",
+      "إن كانت البيانات غير مهمة، يمكن تهيئة الجهاز."
+    ],
+    "dangerousActions": [
+      "الفورمات الفوري.",
+      "التهيئة (Initialize) قبل التحقق من البيانات.",
+      "كتابة أي بيانات على القرص."
+    ],
+    "requiresConfirmation": false,
+    "externalSearchKeywords": [
+      "USB drive no volumes Windows",
+      "RAW partition recovery",
+      "TestDisk partition recovery"
+    ]
+  }
 ]

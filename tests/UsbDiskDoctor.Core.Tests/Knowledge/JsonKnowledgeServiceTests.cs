@@ -10,15 +10,15 @@ namespace UsbDiskDoctor.Core.Tests.Knowledge
     public class JsonKnowledgeServiceTests
     {
         [Fact]
-        public void Load_ReturnsSixArticles()
+        public void Load_ReturnsEightArticles()
         {
             var sut = new JsonKnowledgeService();
 
             var count = sut.Load();
 
-            Assert.Equal(6, count);
+            Assert.Equal(8, count);
             Assert.True(sut.IsLoaded);
-            Assert.Equal(6, sut.ArticleCount);
+            Assert.Equal(8, sut.ArticleCount);
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace UsbDiskDoctor.Core.Tests.Knowledge
             var secondCall = sut.Load();
 
             Assert.Equal(firstCall, secondCall);
-            Assert.Equal(6, secondCall);
+            Assert.Equal(8, secondCall);
         }
 
         [Fact]
@@ -83,13 +83,13 @@ namespace UsbDiskDoctor.Core.Tests.Knowledge
         }
 
         [Fact]
-        public void GetAllArticles_ReturnsAllSixArticles()
+        public void GetAllArticles_ReturnsAllEightArticles()
         {
             var sut = new JsonKnowledgeService();
 
             var allArticles = sut.GetAllArticles();
 
-            Assert.Equal(6, allArticles.Count);
+            Assert.Equal(8, allArticles.Count);
         }
 
         [Fact]
@@ -124,7 +124,9 @@ namespace UsbDiskDoctor.Core.Tests.Knowledge
                 "OPERATIONAL_STATUS_DEGRADED",
                 "RAW_FILESYSTEM",
                 "FILESYSTEM_CHECK_FAILED",
-                "DIRTY_BIT_SET"
+                "DIRTY_BIT_SET",
+                "DEVICE_SIZE_ZERO",
+                "NO_VOLUMES_DETECTED"
             };
 
             foreach (var codeToCheck in expectedCodes)

@@ -4,60 +4,66 @@
 
 ---
 
-## Phases 0-9 — ملخص
+## Phases 0-10 — ملخص
 - Setup + Enums + Models + Serilog
-- USB Discovery + MVVM + TabControl
+- USB Discovery (مع UASP) + MVVM + TabControl
 - Health Check + Diagnostics + Reports (HTML/JSON/WebView2)
-- Knowledge Base (6 articles + EmbeddedResource)
+- Knowledge Base (8 articles + EmbeddedResource)
 - Repair Planning + Safe Execution (whitelist + token + timeout)
 - Basic Recovery (MountedVolumeScanner + SafeFileRestorer + orchestrator)
-- **68 اختبار** ناجح قبل Phase 10
+- Advanced Recovery (SectorReader + FileCarver: JPEG/PNG/PDF)
+- **78 اختبار** ناجح قبل Phase 11
 
 ---
 
-## Phase 10 — Advanced Recovery ✅
-- **Commits**: 3858ffe → (هذا الـ commit)
-- **النتيجة**:
-  - SectorReading: ISectorReader + MemorySectorReader + FileStreamSectorReader
-  - Carving: FileSignature + FileSignatureCatalog + IFileCarver + FileCarver
-  - دعم توقيعات: JPEG (.jpg), PNG (.png), PDF (.pdf)
-  - Chunked scan: 4MB chunks + 64B overlap (signatures across boundaries)
-  - MinFileSizeBytes = 512 (تجنب false positives)
-  - MaxFileSizeBytes = 100MB default (منع runaway)
-  - Infinite-loop protection via `nextPosition <= position` check
-  - Stateless design (all state in local Scan scope)
-  - 10 اختبار FileCarver (MemorySectorReader فقط، لا disk)
-- **قرارات**:
-  - **ISectorReader abstraction** → نختبر carving بـ memory بدون disk
-  - FileAccess.Read فقط في FileStreamSectorReader
-  - لا raw device في Phase 10 (مؤجل — يتطلب admin، غير قابل للاختبار هنا)
-  - SafeFileRestorer يقبل SourceOffset للـ carving (منفصل عن SourceFullPath للمounted)
-- **التحقق**: 78 اختبار ناجح (35 Core + 43 Diagnostics)
+## Phase 11 — Polish بعد الاختبار الحقيقي ✅
+- **Commits**: ee2f7b7 → (هذا الـ commit)
+
+### 11.1 — USB Filter Fix
+- كشف UASP HDDs (`InterfaceType='SCSI'` + `MediaType='External...'`)
+- `IsExternal = (busType == BusType.USB)` بدل hardcoded
+
+### 11.2 — Health Rules
+- **`DEVICE_SIZE_ZERO`** (Critical) — عطل هاردويري
+- **`NO_VOLUMES_DETECTED`** (Warning) — RAW أو غير مهيأ
+- 3 اختبارات جديدة لـ HealthEvaluator
+
+### 11.3 — Risk Classification + Whitelist
+- `DEVICE_SIZE_ZERO` → Dangerous (يحتاج كتابة FORMAT)
+- `NO_VOLUMES_DETECTED` → Medium (يحتاج كتابة CONFIRM)
+- إضافتهما للـ whitelist كـ informational actions
+
+### 11.4 — Knowledge Base Expansion
+- مقالتان جديدتان: DEVICE_SIZE_ZERO, NO_VOLUMES_DETECTED
+- 8 مقالات إجمالاً
+- توصية "استشر مختص clean room" في DEVICE_SIZE_ZERO
+
+### 📸 التحقق العملي (SSK UASP HDD)
+- SSK يظهر في "الأجهزة"
+- Size=0 → Critical ✅
+- DEVICE_SIZE_ZERO diagnostic كامل ✅
+- Dialog يعرض "خطر" + يطلب FORMAT ✅
+- Whitelist يرفض الإجراء غير المُصرّح به ✅
+
+### 📝 قصة الاختبار الحقيقي
+- هارد SSK (JMicron JMS578) وصل بحالة "Click of Death"
+- المستخدم نظّف PCB بنفسه → اختفى الصوت
+- لكن Size=0 لا زال (عطل داخلي)
+- **البرنامج شخّص الحالة بشكل صحيح تماماً**
 
 ---
 
 ## ⚠️ ملاحظة اختبارية
-**لم يُختبر مع فلاشة USB حقيقية** ولا admin-level raw access.
-الجهاز: قرص NVMe واحد فقط، لا يوجد USB حقيقي.
+**الهارد SSK معطوب فيزيائياً** (Size=0 مع عدم وجود صوت).
+- يحتاج مختص clean room
+- لا يمكن لأي برنامج حل هذه الحالة
+- UsbDiskDoctor سلّم التوصية الصحيحة
 
 ---
 
-## Phase 11 — Polish + UI Completion (قيد التخطيط)
-- **الهدف**: إكمال الواجهة + تحسينات
-- **مخطط**:
-  - Recovery Tab في UI (Scan + Restore)
-  - Report Save button (حفظ HTML/JSON في reports/)
-  - Settings Tab (مسارات افتراضية)
-  - تحسين Styles والألوان
-  - إصلاح filter `InterfaceType='USB'` (يدعم UASP)
-  - أيقونة + تنفيذ .exe
-
----
-
-## Phase 12 — Final Polish (قيد التخطيط)
-- **الهدف**: التغليف النهائي + الاختبارات
-- **مخطط**:
-  - `dotnet publish` لـ win-x64 single file
-  - README.md شامل
-  - user-guide.md
-  - final test على جهاز نظيف
+## Phase 12 — Final Package (قيد التخطيط)
+- `dotnet publish` single-file win-x64
+- README.md شامل
+- docs/user-guide.md
+- أيقونة (اختياري)
+- Final commit + Tag v1.0.0
