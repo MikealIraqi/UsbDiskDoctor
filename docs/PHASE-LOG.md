@@ -27,16 +27,29 @@
 
 ---
 
-## Phase 2 — USB Discovery (قيد التنفيذ)
+## Phase 2 — USB Discovery (مكتمل ✅)
 - **بدء**: 2026-10-05
-- **الهدف**: عرض قائمة أقراص USB في MainWindow عبر MVVM
-- **قرارات**:
-  - مكتبة WMI: System.Management
+- **انتهاء**: 2026-10-05
+- **Commits**: 48bb193 → (commit أخير 2.6)
+- **النتيجة**:
+  - Discovery: IDeviceDiscoveryService + WmiDeviceDiscoveryService
+  - MVVM: ViewModelBase + RelayCommand + MainViewModel
+  - UI: MainWindow يربط بـ MainViewModel، زر تحديث + ListView + StatusBar
+  - اختبارات: DeviceSummary + VolumeInfo
+- **قرارات مهمة**:
+  - System.Management 10.0.12 لمشروع Diagnostics
+  - **TFM = net8.0-windows** لأي مشروع يستخدم Windows APIs
   - MVVM يدوي (بدون Toolkit حتى Phase 3)
-  - Discovery Service في Diagnostics/DeviceDiscovery/
-  - async/await لكل استدعاءات WMI
-  - فلترة InterfaceType='USB'
+  - Composition Root يدوي في App.xaml.cs
+  - Serilog يبدأ/ينتهي مع التطبيق
+- **التحقق العملي**: التطبيق يفتح، زر تحديث يعمل، WMI يستعلم بنجاح
 
-### 2.1 — Interface + Options ✅
-- IDeviceDiscoveryService
-- DiscoveryOptions
+---
+
+## Phase 3 — Device Details (قيد التخطيط)
+- **الهدف**: تفاصيل كاملة لكل جهاز (volumes + partition info)
+- **مخطط**:
+  - قراءة Win32_LogicalDisk لكل disk
+  - ربط VolumeInfo بـ DeviceSummary.Volumes
+  - TabControl في الواجهة (قائمة / تفاصيل)
+  - إضافة CommunityToolkit.Mvvm
