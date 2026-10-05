@@ -69,6 +69,28 @@ namespace UsbDiskDoctor.Repair.Execution
                     Timeout = TimeSpan.FromMinutes(30),
                     MessageAr = "سيتم تشغيل chkdsk /scan (قراءة فقط).",
                     MessageEn = "Running chkdsk /scan (read-only)."
+                },
+                ["DEVICE_SIZE_ZERO"] = new ActionSpec
+                {
+                    ActionCode = "DEVICE_SIZE_ZERO",
+                    RequiredRiskLevel = RiskLevel.Dangerous,
+                    RequiredConfirmationToken = "FORMAT",
+                    Executable = null,
+                    ArgumentsTemplate = null,
+                    RequiresDriveLetter = false,
+                    MessageAr = "الجهاز معطوب هاردويرياً. لا يوجد إصلاح برمجي. استبدل الجهاز أو استشر مختصاً.",
+                    MessageEn = "Hardware failure. No software repair available. Replace or seek professional help."
+                },
+                ["NO_VOLUMES_DETECTED"] = new ActionSpec
+                {
+                    ActionCode = "NO_VOLUMES_DETECTED",
+                    RequiredRiskLevel = RiskLevel.Medium,
+                    RequiredConfirmationToken = "CONFIRM",
+                    Executable = null,
+                    ArgumentsTemplate = null,
+                    RequiresDriveLetter = false,
+                    MessageAr = "افحص الجهاز في Disk Management يدوياً. لا تعمل فورمات قبل التأكد من البيانات.",
+                    MessageEn = "Open Disk Management to inspect manually. Do NOT format before confirming data safety."
                 }
             };
 

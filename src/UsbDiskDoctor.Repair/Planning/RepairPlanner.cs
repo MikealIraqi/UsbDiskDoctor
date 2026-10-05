@@ -115,6 +115,16 @@ namespace UsbDiskDoctor.Repair.Planning
                 return RiskLevel.Safe;
             }
 
+            if (upperCode.Contains("DEVICE_SIZE_ZERO"))
+            {
+                return RiskLevel.Dangerous;
+            }
+
+            if (upperCode.Contains("NO_VOLUMES_DETECTED"))
+            {
+                return RiskLevel.Medium;
+            }
+
             if (upperCode.Contains("FILESYSTEM_CHECK_FAILED"))
             {
                 return RiskLevel.Medium;
