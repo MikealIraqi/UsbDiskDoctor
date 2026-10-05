@@ -29,22 +29,30 @@
 - 11 اختبار لـ HealthEvaluator
 
 ## Phase 5 — Diagnostic Engine + Reports ✅
-- **Commits**: fe034ee → (هذا الـ commit)
+- **Commits**: fe034ee → e8fff87
+- IDiagnosticEngine + DiagnosticEngine (fail-soft orchestrator)
+- IReportGenerator + JsonReportGenerator + HtmlReportGenerator (RTL عربي)
+- WebView2 Report tab + زر "فحص كامل"
+- 9 اختبارات جديدة → 20 إجمالي Diagnostics.Tests
+
+## Phase 6 — Knowledge Base ✅
+- **Commits**: ce2071c → (هذا الـ commit)
 - **النتيجة**:
-  - IDiagnosticEngine + DiagnosticEngine (fail-soft orchestrator)
-  - IReportGenerator + JsonReportGenerator + HtmlReportGenerator (RTL عربي)
-  - Reporting TFM تغيّر إلى net8.0-windows
-  - ReportViewModel + MainViewModel محدّث
-  - **WebView2 Report tab** مع fallback نصي
-  - زر "فحص كامل"
-  - 9 اختبارات جديدة (Json + Html) — 20 اختبار إجمالي
+  - IKnowledgeService + JsonKnowledgeService
+  - knowledge.json مُضمَّن كـ EmbeddedResource (LogicalName صريح)
+  - 6 مقالات: SMART_PREDICT_FAILURE, OPERATIONAL_STATUS_ERROR,
+    OPERATIONAL_STATUS_DEGRADED, RAW_FILESYSTEM,
+    FILESYSTEM_CHECK_FAILED, DIRTY_BIT_SET
+  - كل مقال: TitleAr/En, CauseAr/En, SafeActions, DangerousActions,
+    RequiresConfirmation, ExternalSearchKeywords
+  - 9 اختبارات JsonKnowledgeService
 - **قرارات**:
-  - Reporting TFM = net8.0-windows (يعتمد Diagnostics)
-  - HTML في WebView2 بدلاً من متصفح خارجي
-  - inline CSS (offline 100%)
-  - UnsafeRelaxedJsonEscaping + JsonStringEnumConverter
-  - WebUtility.HtmlEncode لكل نص مستخدم (XSS prevention)
-  - تقرير يُعرض تلقائياً + لا يُحفظ بعد (الحفظ في Phase 6+)
+  - EmbeddedResource بدلاً من ملف خارجي (يستحيل يضيع)
+  - LogicalName صريح (لا يعتمد على مسار)
+  - Idempotent Load + EnsureLoaded auto
+  - OrdinalIgnoreCase للبحث عن الأكواد
+  - اختبارات Knowledge في Core.Tests (احترام "2 test projects")
+- **التحقق العملي**: GetManifestResourceNames() يرجع الاسم الصحيح
 
 ---
 
@@ -53,10 +61,10 @@
 
 ---
 
-## Phase 6 — Knowledge Base (قيد التخطيط)
-- **الهدف**: قاعدة معرفة JSON + article lookup
+## Phase 7 — Repair Proposals (قيد التخطيط)
+- **الهدف**: ربط Diagnostics بـ Knowledge لإنتاج RepairProposal
 - **مخطط**:
-  - KnowledgeArticle JSON (data/knowledge.json)
-  - IKnowledgeService + JsonKnowledgeService
-  - ربط problem codes بـ articles
+  - IRepairPlanner + RepairPlanner
+  - لكل DiagnosticResult مع Code → KnowledgeArticle → RepairProposal
+  - RiskLevel من Article.RequiresConfirmation + Code
   - عرض في TabDetails
