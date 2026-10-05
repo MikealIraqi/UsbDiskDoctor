@@ -1,12 +1,62 @@
-﻿<Window x:Class="UsbDiskDoctor.App.MainWindow"
+<Window x:Class="UsbDiskDoctor.App.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:UsbDiskDoctor.App"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="UsbDiskDoctor — أداة فحص أقراص USB"
+        Width="900"
+        Height="600"
+        WindowStartupLocation="CenterScreen">
+    <Grid x:Name="RootGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
+        <!-- شريط الأدوات العلوي -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+            <Button Content="تحديث"
+                    Command="{Binding RefreshCommand}"
+                    Padding="20,5"
+                    Margin="0,0,10,0"/>
+            <TextBlock Text="{Binding StatusMessage}"
+                       VerticalAlignment="Center"
+                       FontSize="14"/>
+        </StackPanel>
+
+        <!-- قائمة الأجهزة -->
+        <ListView Grid.Row="1"
+                  ItemsSource="{Binding Devices}"
+                  SelectedItem="{Binding SelectedDevice}"
+                  Margin="10">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="اسم الجهاز" DisplayMemberBinding="{Binding FriendlyName}" Width="200"/>
+                    <GridViewColumn Header="معرف الجهاز" DisplayMemberBinding="{Binding DeviceId}" Width="250"/>
+                    <GridViewColumn Header="الحجم (بايت)" DisplayMemberBinding="{Binding SizeBytes}" Width="150"/>
+                    <GridViewColumn Header="الحالة التشغيلية" DisplayMemberBinding="{Binding OperationalStatus}" Width="150"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <!-- شريط الحالة -->
+        <StatusBar Grid.Row="2">
+            <StatusBarItem>
+                <TextBlock Text="{Binding StatusMessage}"/>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <TextBlock>
+                    <Run Text="عدد الأجهزة: "/>
+                    <Run Text="{Binding Devices.Count, Mode=OneWay}"/>
+                </TextBlock>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>
