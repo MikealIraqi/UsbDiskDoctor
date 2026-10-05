@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\UsbDiskDoctor.Core\UsbDiskDoctor.Core.csproj" />
+    <ProjectReference Include="..\UsbDiskDoctor.Diagnostics\UsbDiskDoctor.Diagnostics.csproj" />
+    <ProjectReference Include="..\UsbDiskDoctor.Repair\UsbDiskDoctor.Repair.csproj" />
+    <ProjectReference Include="..\UsbDiskDoctor.Recovery\UsbDiskDoctor.Recovery.csproj" />
+    <ProjectReference Include="..\UsbDiskDoctor.Knowledge\UsbDiskDoctor.Knowledge.csproj" />
+    <ProjectReference Include="..\UsbDiskDoctor.Reporting\UsbDiskDoctor.Reporting.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+</Project>

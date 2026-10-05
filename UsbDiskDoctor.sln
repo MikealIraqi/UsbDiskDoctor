@@ -1,0 +1,85 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E980A167-E377-48DC-80E8-4D22971840B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsbDiskDoctor.App", "src\UsbDiskDoctor.App\UsbDiskDoctor.App.csproj", "{B0904432-5712-4CCE-AAA1-D928B3C237C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsbDiskDoctor.Core", "src\UsbDiskDoctor.Core\UsbDiskDoctor.Core.csproj", "{D937C57B-2370-46D5-A7B2-B1C3EC2DF5A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsbDiskDoctor.Diagnostics", "src\UsbDiskDoctor.Diagnostics\UsbDiskDoctor.Diagnostics.csproj", "{59EDF0C4-EFEE-434E-87A8-DE993871078F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsbDiskDoctor.Repair", "src\UsbDiskDoctor.Repair\UsbDiskDoctor.Repair.csproj", "{EF7CBEB2-A5B2-4D9A-8B38-D0225EE92C02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsbDiskDoctor.Recovery", "src\UsbDiskDoctor.Recovery\UsbDiskDoctor.Recovery.csproj", "{CB9186DF-A3E9-4247-8CC0-46C14A695B5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsbDiskDoctor.Knowledge", "src\UsbDiskDoctor.Knowledge\UsbDiskDoctor.Knowledge.csproj", "{996B371E-6EDB-449A-8E2C-70AD95553FEE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsbDiskDoctor.Reporting", "src\UsbDiskDoctor.Reporting\UsbDiskDoctor.Reporting.csproj", "{E1F81849-C720-4253-A3D0-EC1F818D253D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1F77FC7A-7568-4510-AEC2-167943DECCB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsbDiskDoctor.Core.Tests", "tests\UsbDiskDoctor.Core.Tests\UsbDiskDoctor.Core.Tests.csproj", "{CB31C98A-7E0A-43F9-9714-50FB8E1BC138}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsbDiskDoctor.Diagnostics.Tests", "tests\UsbDiskDoctor.Diagnostics.Tests\UsbDiskDoctor.Diagnostics.Tests.csproj", "{C6837EAB-5535-4B5A-BC84-A517D0B2455F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B0904432-5712-4CCE-AAA1-D928B3C237C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0904432-5712-4CCE-AAA1-D928B3C237C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0904432-5712-4CCE-AAA1-D928B3C237C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0904432-5712-4CCE-AAA1-D928B3C237C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D937C57B-2370-46D5-A7B2-B1C3EC2DF5A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D937C57B-2370-46D5-A7B2-B1C3EC2DF5A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D937C57B-2370-46D5-A7B2-B1C3EC2DF5A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D937C57B-2370-46D5-A7B2-B1C3EC2DF5A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59EDF0C4-EFEE-434E-87A8-DE993871078F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59EDF0C4-EFEE-434E-87A8-DE993871078F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59EDF0C4-EFEE-434E-87A8-DE993871078F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59EDF0C4-EFEE-434E-87A8-DE993871078F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF7CBEB2-A5B2-4D9A-8B38-D0225EE92C02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF7CBEB2-A5B2-4D9A-8B38-D0225EE92C02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF7CBEB2-A5B2-4D9A-8B38-D0225EE92C02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF7CBEB2-A5B2-4D9A-8B38-D0225EE92C02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB9186DF-A3E9-4247-8CC0-46C14A695B5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB9186DF-A3E9-4247-8CC0-46C14A695B5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB9186DF-A3E9-4247-8CC0-46C14A695B5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB9186DF-A3E9-4247-8CC0-46C14A695B5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{996B371E-6EDB-449A-8E2C-70AD95553FEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{996B371E-6EDB-449A-8E2C-70AD95553FEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{996B371E-6EDB-449A-8E2C-70AD95553FEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{996B371E-6EDB-449A-8E2C-70AD95553FEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1F81849-C720-4253-A3D0-EC1F818D253D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1F81849-C720-4253-A3D0-EC1F818D253D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1F81849-C720-4253-A3D0-EC1F818D253D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1F81849-C720-4253-A3D0-EC1F818D253D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB31C98A-7E0A-43F9-9714-50FB8E1BC138}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB31C98A-7E0A-43F9-9714-50FB8E1BC138}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB31C98A-7E0A-43F9-9714-50FB8E1BC138}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB31C98A-7E0A-43F9-9714-50FB8E1BC138}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6837EAB-5535-4B5A-BC84-A517D0B2455F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6837EAB-5535-4B5A-BC84-A517D0B2455F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6837EAB-5535-4B5A-BC84-A517D0B2455F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6837EAB-5535-4B5A-BC84-A517D0B2455F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B0904432-5712-4CCE-AAA1-D928B3C237C8} = {E980A167-E377-48DC-80E8-4D22971840B2}
+		{D937C57B-2370-46D5-A7B2-B1C3EC2DF5A1} = {E980A167-E377-48DC-80E8-4D22971840B2}
+		{59EDF0C4-EFEE-434E-87A8-DE993871078F} = {E980A167-E377-48DC-80E8-4D22971840B2}
+		{EF7CBEB2-A5B2-4D9A-8B38-D0225EE92C02} = {E980A167-E377-48DC-80E8-4D22971840B2}
+		{CB9186DF-A3E9-4247-8CC0-46C14A695B5A} = {E980A167-E377-48DC-80E8-4D22971840B2}
+		{996B371E-6EDB-449A-8E2C-70AD95553FEE} = {E980A167-E377-48DC-80E8-4D22971840B2}
+		{E1F81849-C720-4253-A3D0-EC1F818D253D} = {E980A167-E377-48DC-80E8-4D22971840B2}
+		{CB31C98A-7E0A-43F9-9714-50FB8E1BC138} = {1F77FC7A-7568-4510-AEC2-167943DECCB4}
+		{C6837EAB-5535-4B5A-BC84-A517D0B2455F} = {1F77FC7A-7568-4510-AEC2-167943DECCB4}
+	EndGlobalSection
+EndGlobal

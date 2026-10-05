@@ -1,0 +1,39 @@
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+*.pdb
+*.cache
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# .NET / NuGet
+*.nupkg
+*.snupkg
+packages/
+*.dll
+*.exe
+*.log
+
+# UsbDiskDoctor specific
+logs/*
+!logs/.gitkeep
+reports/*
+!reports/.gitkeep
+*.db
+*.db-shm
+*.db-wal
