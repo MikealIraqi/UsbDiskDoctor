@@ -177,6 +177,48 @@
                 </Setter>
             </Style>
 
-        </ResourceDictionary>
+                    <!-- ═══ LISTVIEW HEADER ═══ -->
+            <Style x:Key="ModernColumnHeaderStyle" TargetType="GridViewColumnHeader">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+                <Setter Property="FontFamily" Value="{StaticResource PrimaryFontFamily}"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Padding" Value="12,10"/>
+                <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="GridViewColumnHeader">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- ═══ BADGES ═══ -->
+            <Style x:Key="BadgeBase" TargetType="Border">
+                <Setter Property="CornerRadius" Value="12"/>
+                <Setter Property="Padding" Value="10,4"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+            </Style>
+
+            <Style x:Key="BadgeHealthy" TargetType="Border" BasedOn="{StaticResource BadgeBase}">
+                <Setter Property="Background" Value="{StaticResource SuccessLightBrush}"/>
+            </Style>
+            <Style x:Key="BadgeWarning" TargetType="Border" BasedOn="{StaticResource BadgeBase}">
+                <Setter Property="Background" Value="{StaticResource WarningLightBrush}"/>
+            </Style>
+            <Style x:Key="BadgeCritical" TargetType="Border" BasedOn="{StaticResource BadgeBase}">
+                <Setter Property="Background" Value="{StaticResource DangerLightBrush}"/>
+            </Style>
+</ResourceDictionary>
     </Application.Resources>
 </Application>

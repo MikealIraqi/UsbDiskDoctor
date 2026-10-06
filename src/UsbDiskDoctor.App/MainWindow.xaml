@@ -141,6 +141,9 @@
                               BorderThickness="0"
                               Background="Transparent"
                               Padding="8">
+                        <ListView.Resources>
+                            <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource ModernColumnHeaderStyle}"/>
+                        </ListView.Resources>
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
