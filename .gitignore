@@ -38,3 +38,6 @@ reports/*
 *.db
 *.db-shm
 *.db-wal
+# Release archives
+UsbDiskDoctor-v*.zip
+*.zip
