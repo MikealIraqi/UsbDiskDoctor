@@ -149,13 +149,7 @@ public sealed class FakeCapacityChecker : IFakeCapacityChecker
             sampleCount = 1;
         }
 
-        var sampleBlockIndices = new HashSet<long>();
-        for (long sampleIdx = 0; sampleIdx < sampleCount; sampleIdx++)
-        {
-            long index = sampleCount == 1 ? 0 : (totalBlocks - 1) * sampleIdx / (sampleCount - 1);
-            sampleBlockIndices.Add(index);
-        }
-        var sortedIndices = sampleBlockIndices.OrderBy(x => x).ToList();
+        var sortedIndices = ComputeSampleIndices(totalBlocks, sampleCount);
 
         FileStream? fs = null;
         try
@@ -369,13 +363,7 @@ public sealed class FakeCapacityChecker : IFakeCapacityChecker
                 var firstFailure = failures[0];
                 long failedExpected = firstFailure.expectedIndex;
                 long failedReadback = firstFailure.readIndex;
-                long deltaBlocks = failedReadback - failedExpected;
-                long actualBlocks = totalBlocks - deltaBlocks;
-                if (actualBlocks < 1)
-                {
-                    actualBlocks = 1;
-                }
-                long actualBytes = actualBlocks * blockSize;
+                long actualBytes = ComputeActualCapacity(totalBlocks, blockSize, failedExpected, failedReadback);
 
                 double claimedGb = claimed / (1024.0 * 1024.0 * 1024.0);
                 double actualGb = actualBytes / (1024.0 * 1024.0 * 1024.0);
@@ -409,7 +397,53 @@ public sealed class FakeCapacityChecker : IFakeCapacityChecker
         }
     }
 
-    private static void BuildBlock(byte[] buffer, long blockIndex, int blockSize)
+    /// <summary>
+    /// Computes evenly distributed sample block indices across the claimed capacity.
+    /// </summary>
+    /// <param name="totalBlocks">Total blocks based on claimed capacity.</param>
+    /// <param name="sampleCount">Number of samples to distribute.</param>
+    /// <returns>Sorted, distinct list of block indices.</returns>
+    internal static List<long> ComputeSampleIndices(long totalBlocks, int sampleCount)
+    {
+        var sampleBlockIndices = new HashSet<long>();
+        for (long sampleIdx = 0; sampleIdx < sampleCount; sampleIdx++)
+        {
+            long index = sampleCount == 1 ? 0 : (totalBlocks - 1) * sampleIdx / (sampleCount - 1);
+            sampleBlockIndices.Add(index);
+        }
+        return sampleBlockIndices.OrderBy(x => x).ToList();
+    }
+
+    /// <summary>
+    /// Computes the actual capacity in bytes based on a wraparound failure.
+    /// </summary>
+    /// <param name="totalBlocks">Total blocks based on claimed capacity.</param>
+    /// <param name="blockSize">Size of each block in bytes.</param>
+    /// <param name="failedExpected">Block index that was written.</param>
+    /// <param name="failedReadback">Block index that was read back (differs from expected = wraparound).</param>
+    /// <returns>Actual capacity in bytes, with a minimum of one block.</returns>
+    internal static long ComputeActualCapacity(
+        long totalBlocks,
+        long blockSize,
+        long failedExpected,
+        long failedReadback)
+    {
+        long deltaBlocks = failedReadback - failedExpected;
+        long actualBlocks = totalBlocks - deltaBlocks;
+        if (actualBlocks < 1)
+        {
+            actualBlocks = 1;
+        }
+        return actualBlocks * blockSize;
+    }
+
+    /// <summary>
+    /// Builds a test block with magic header and block index for later verification.
+    /// </summary>
+    /// <param name="buffer">Destination buffer; must be at least <paramref name="blockSize"/> bytes.</param>
+    /// <param name="blockIndex">Unique block index written into the header.</param>
+    /// <param name="blockSize">Total block size in bytes.</param>
+    internal static void BuildBlock(byte[] buffer, long blockIndex, int blockSize)
     {
         // Magic "USBDDOC1"
         buffer[0] = 0x55;
@@ -426,7 +460,12 @@ public sealed class FakeCapacityChecker : IFakeCapacityChecker
         Array.Clear(buffer, 16, blockSize - 16);
     }
 
-    private static long ParseBlockIndex(byte[] buffer)
+    /// <summary>
+    /// Reads the block index stored in the block header.
+    /// </summary>
+    /// <param name="buffer">Block buffer previously written by <see cref="BuildBlock"/>.</param>
+    /// <returns>The block index that was stored.</returns>
+    internal static long ParseBlockIndex(byte[] buffer)
     {
         return BinaryPrimitives.ReadInt64LittleEndian(buffer.AsSpan(8, 8));
     }
