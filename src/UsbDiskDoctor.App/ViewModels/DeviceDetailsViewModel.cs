@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using UsbDiskDoctor.Core.Models;
+using UsbDiskDoctor.Recovery.CapacityChecking;
 
 namespace UsbDiskDoctor.App.ViewModels
 {
@@ -14,9 +15,12 @@ namespace UsbDiskDoctor.App.ViewModels
         [ObservableProperty]
         private DeviceSummary? _device;
 
-        public DeviceDetailsViewModel(DeviceSummary? device)
+        private readonly IFakeCapacityChecker _capacityChecker;
+
+        public DeviceDetailsViewModel(DeviceSummary? device, IFakeCapacityChecker capacityChecker)
         {
             _device = device;
+            _capacityChecker = capacityChecker ?? throw new ArgumentNullException(nameof(capacityChecker));
         }
 
         public bool HasDevice => Device != null;
@@ -51,6 +55,11 @@ namespace UsbDiskDoctor.App.ViewModels
         public int ProposalsCount => Proposals.Count;
 
         public bool HasProposals => Proposals.Count > 0;
+
+        [ObservableProperty]
+        private CapacityCheckViewModel? _capacityCheck;
+
+        public bool HasCapacityCheck => CapacityCheck != null;
 
         public void SetProposals(IReadOnlyList<RepairProposal> proposals)
         {
@@ -89,8 +98,56 @@ namespace UsbDiskDoctor.App.ViewModels
             OnPropertyChanged(nameof(VolumesCountText));
             OnPropertyChanged(nameof(Volumes));
 
+            RebuildCapacityCheck(value);
+
             // Clear proposals when device changes — they're stale now.
             ClearProposals();
+        }
+
+        private void RebuildCapacityCheck(DeviceSummary? device)
+        {
+            if (CapacityCheck?.IsRunning == true)
+            {
+                CapacityCheck.CancelCheckCommand.Execute(null);
+            }
+
+            CapacityCheck = BuildCapacityCheck(device);
+            OnPropertyChanged(nameof(HasCapacityCheck));
+        }
+
+        private CapacityCheckViewModel? BuildCapacityCheck(DeviceSummary? device)
+        {
+            if (device == null || device.Volumes.Count == 0)
+            {
+                return null;
+            }
+
+            VolumeInfo? bestVolume = null;
+            foreach (var volume in device.Volumes)
+            {
+                if (!volume.IsMounted || volume.IsRaw)
+                {
+                    continue;
+                }
+
+                if (bestVolume == null || volume.FreeSpaceBytes > bestVolume.FreeSpaceBytes)
+                {
+                    bestVolume = volume;
+                }
+            }
+
+            if (bestVolume == null)
+            {
+                return null;
+            }
+
+            var letter = (bestVolume.DriveLetter ?? string.Empty).TrimEnd(':').Trim();
+            if (string.IsNullOrEmpty(letter))
+            {
+                return null;
+            }
+
+            return new CapacityCheckViewModel(_capacityChecker, letter + ":\\");
         }
 
         private static string FormatBytes(long bytes)

@@ -6,6 +6,7 @@ using UsbDiskDoctor.Diagnostics.DiagnosticEngine;
 using UsbDiskDoctor.Diagnostics.HealthChecks;
 using UsbDiskDoctor.Diagnostics.VolumeReading;
 using UsbDiskDoctor.Knowledge.Services;
+using UsbDiskDoctor.Recovery.CapacityChecking;
 using UsbDiskDoctor.Repair.Execution;
 using UsbDiskDoctor.Repair.Planning;
 using UsbDiskDoctor.Reporting;
@@ -45,12 +46,16 @@ namespace UsbDiskDoctor.App
             // Reporting
             var htmlReportGenerator = new HtmlReportGenerator();
 
+            // Recovery
+            var fakeCapacityChecker = new FakeCapacityChecker();
+
             var mainViewModel = new MainViewModel(
                 discoveryService,
                 diagnosticEngine,
                 htmlReportGenerator,
                 repairPlanner,
-                repairExecutor);
+                repairExecutor,
+                fakeCapacityChecker);
             var mainWindow = new MainWindow(mainViewModel);
 
             mainWindow.Show();

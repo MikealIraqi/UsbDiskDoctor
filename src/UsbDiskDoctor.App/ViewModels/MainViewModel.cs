@@ -9,6 +9,7 @@ using UsbDiskDoctor.Core.Models;
 using UsbDiskDoctor.Diagnostics.DeviceDiscovery;
 using UsbDiskDoctor.Diagnostics.DiagnosticEngine;
 using UsbDiskDoctor.Diagnostics.Models;
+using UsbDiskDoctor.Recovery.CapacityChecking;
 using UsbDiskDoctor.Repair.Execution;
 using UsbDiskDoctor.Repair.Planning;
 using UsbDiskDoctor.Reporting;
@@ -26,6 +27,7 @@ namespace UsbDiskDoctor.App.ViewModels
         private readonly HtmlReportGenerator _htmlReportGenerator;
         private readonly IRepairPlanner _repairPlanner;
         private readonly IRepairExecutor _repairExecutor;
+        private readonly IFakeCapacityChecker _capacityChecker;
         private readonly DeviceDetailsViewModel _detailsViewModel;
 
         [ObservableProperty]
@@ -55,16 +57,18 @@ namespace UsbDiskDoctor.App.ViewModels
             IDiagnosticEngine diagnosticEngine,
             HtmlReportGenerator htmlReportGenerator,
             IRepairPlanner repairPlanner,
-            IRepairExecutor repairExecutor)
+            IRepairExecutor repairExecutor,
+            IFakeCapacityChecker capacityChecker)
         {
             _discoveryService = discoveryService ?? throw new ArgumentNullException(nameof(discoveryService));
             _diagnosticEngine = diagnosticEngine ?? throw new ArgumentNullException(nameof(diagnosticEngine));
             _htmlReportGenerator = htmlReportGenerator ?? throw new ArgumentNullException(nameof(htmlReportGenerator));
             _repairPlanner = repairPlanner ?? throw new ArgumentNullException(nameof(repairPlanner));
             _repairExecutor = repairExecutor ?? throw new ArgumentNullException(nameof(repairExecutor));
+            _capacityChecker = capacityChecker ?? throw new ArgumentNullException(nameof(capacityChecker));
 
             Devices = new ObservableCollection<DeviceSummary>();
-            _detailsViewModel = new DeviceDetailsViewModel(null);
+            _detailsViewModel = new DeviceDetailsViewModel(null, _capacityChecker);
             _reportViewModel = new ReportViewModel();
         }
 
