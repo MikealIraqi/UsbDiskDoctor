@@ -124,3 +124,14 @@
 - Core.Tests: 55
 - Diagnostics.Tests: 46
 - App.Tests: 12
+
+---
+
+## v1.3.0 - Polish + Accessibility
+
+- Focus ring + Tab nav + AutomationProperties
+- Loading overlay + Empty states
+- MediaType inference (HDD/SSD/Flash)
+- Release publish نظيف
+
+الاختبارات الآن: 137 (كان 113)

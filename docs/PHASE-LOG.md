@@ -144,3 +144,23 @@
   - App.Tests: 12
 - مقالات Knowledge: 9
 - NuGet packages: 7 (بلا تغيير)
+
+---
+
+## Phase 15 - Polish + Accessibility (v1.3.0)
+
+### 15.1 - Accessibility (cb10cd8)
+- Focus Visual Style + TabNav + 7 AutomationProperties
+
+### 15.2 - Loading + Empty States (903c2b7)
+- Loading overlay + Empty states
+
+### 15.3a - Publish Cleanup (e98ef24)
+- DebugType=embedded، publish: 18 -> 4 ملفات
+
+### 15.3b - MediaType Inference (bb71f44)
+- MSFT_PhysicalDisk: 3=HDD، 4=SSD، 5=SCM
+- Fallback WMI string، 24 اختبار
+
+## الإحصائيات بعد v1.3.0
+- 10 مشاريع، 137 اختبار (55+70+12)، Publish 70.64 MB
