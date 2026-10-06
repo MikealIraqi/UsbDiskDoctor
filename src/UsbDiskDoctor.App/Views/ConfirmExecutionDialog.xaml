@@ -103,7 +103,7 @@
         <StackPanel Grid.Row="2"
                     Orientation="Horizontal"
                     HorizontalAlignment="Center">
-            <Button Content="إلغاء"
+            <Button AutomationProperties.Name="إلغاء الحوار" IsCancel="True" Content="إلغاء"
                     Style="{StaticResource GhostButton}"
                     Width="120"
                     Margin="0,0,12,0"

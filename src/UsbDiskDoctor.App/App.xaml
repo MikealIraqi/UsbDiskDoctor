@@ -5,6 +5,24 @@
              ShutdownMode="OnMainWindowClose">
     <Application.Resources>
         <ResourceDictionary>
+            <!-- ═══ ACCESSIBILITY: Focus Visual Style ═══ -->
+            <Style x:Key="{x:Static SystemParameters.FocusVisualStyleKey}" TargetType="Control">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Rectangle Stroke="{StaticResource PrimaryBrush}"
+                                       StrokeThickness="2"
+                                       StrokeDashArray="3 2"
+                                       RadiusX="8"
+                                       RadiusY="8"
+                                       Margin="-3"
+                                       SnapsToDevicePixels="True"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Marker: FocusRing -->
 
             <!-- Converters -->
             <BooleanToVisibilityConverter x:Key="BoolToVis"/>

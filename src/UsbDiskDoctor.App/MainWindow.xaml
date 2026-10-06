@@ -68,11 +68,13 @@
                             Margin="0,0,8,0"
                             Click="OnExitClicked"
                             ToolTip="إغلاق التطبيق"/>
-                    <Button Content="فحص كامل"
+                    <Button AutomationProperties.Name="تشغيل الفحص الكامل للجهاز المحدد"
+                            Content="فحص كامل"
                             Style="{StaticResource SecondaryButton}"
                             Command="{Binding RunFullDiagnosticCommand}"
                             Margin="0,0,8,0"/>
-                    <Button Content="تحديث"
+                    <Button AutomationProperties.Name="تحديث قائمة الأجهزة"
+                            Content="تحديث"
                             Style="{StaticResource PrimaryButton}"
                             Command="{Binding RefreshCommand}"/>
                 </StackPanel>
@@ -83,6 +85,7 @@
         <!-- MAIN CONTENT (TABS)                          -->
         <!-- ═══════════════════════════════════════════ -->
         <TabControl Grid.Row="1"
+                    KeyboardNavigation.TabNavigation="Once"
                     Margin="20"
                     Background="Transparent"
                     BorderThickness="0">
@@ -137,7 +140,8 @@
                         BorderThickness="1"
                         CornerRadius="12"
                         Margin="0,12,0,0">
-                    <ListView ItemsSource="{Binding Devices}"
+                    <ListView AutomationProperties.Name="قائمة أجهزة USB المتصلة"
+                              ItemsSource="{Binding Devices}"
                               SelectedItem="{Binding SelectedDevice}"
                               BorderThickness="0"
                               Background="Transparent"
@@ -332,7 +336,8 @@
 
                                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                                         <TextBlock Text="الوضع:" Style="{StaticResource TextLabel}" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                        <ComboBox SelectedValue="{Binding SelectedMode, Mode=TwoWay}"
+                                        <ComboBox AutomationProperties.Name="وضع فحص السعة الحقيقية"
+                                                  SelectedValue="{Binding SelectedMode, Mode=TwoWay}"
                                                   SelectedValuePath="Tag"
                                                   MinWidth="140"
                                                   FontFamily="{StaticResource PrimaryFontFamily}"
@@ -355,12 +360,14 @@
                                               Margin="20,0"/>
 
                                     <StackPanel Grid.Column="2" Orientation="Horizontal">
-                                        <Button Content="إلغاء"
+                                        <Button AutomationProperties.Name="إلغاء فحص السعة الجاري"
+                                                Content="إلغاء"
                                                 Style="{StaticResource SecondaryButton}"
                                                 Command="{Binding CancelCheckCommand}"
                                                 Padding="14,8"
                                                 Margin="0,0,8,0"/>
-                                        <Button Content="▶ بدء الفحص"
+                                        <Button AutomationProperties.Name="بدء فحص السعة الحقيقية للقرص"
+                                                Content="▶ بدء الفحص"
                                                 Style="{StaticResource PrimaryButton}"
                                                 Command="{Binding StartCheckCommand}"
                                                 Padding="14,8"/>
@@ -385,7 +392,8 @@
                                             <TextBlock Grid.Column="1" Text="{Binding PercentComplete, StringFormat={}{0:F1}%}" Style="{StaticResource TextBody}" FontWeight="SemiBold" Foreground="{StaticResource PrimaryBrush}"/>
                                         </Grid>
 
-                                        <ProgressBar Value="{Binding PercentComplete}"
+                                        <ProgressBar AutomationProperties.Name="نسبة تقدم فحص السعة"
+                                                     Value="{Binding PercentComplete}"
                                                      Minimum="0" Maximum="100"
                                                      Height="8"
                                                      Margin="0,8,0,12"
