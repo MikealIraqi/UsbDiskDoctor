@@ -1,0 +1,102 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- ========================================== -->
+    <!-- Brand Colors (Indigo 600 - Linear style)  -->
+    <!-- ========================================== -->
+    <Color x:Key="PrimaryColor">#4F46E5</Color>
+    <Color x:Key="PrimaryHoverColor">#4338CA</Color>
+    <Color x:Key="PrimaryPressedColor">#3730A3</Color>
+    <Color x:Key="PrimaryLightColor">#EEF2FF</Color>
+
+    <!-- ========================================== -->
+    <!-- Semantic Colors                            -->
+    <!-- ========================================== -->
+    <Color x:Key="SuccessColor">#10B981</Color>
+    <Color x:Key="SuccessLightColor">#D1FAE5</Color>
+    <Color x:Key="SuccessDarkColor">#065F46</Color>
+
+    <Color x:Key="WarningColor">#F59E0B</Color>
+    <Color x:Key="WarningLightColor">#FEF3C7</Color>
+    <Color x:Key="WarningDarkColor">#92400E</Color>
+
+    <Color x:Key="DangerColor">#EF4444</Color>
+    <Color x:Key="DangerLightColor">#FEE2E2</Color>
+    <Color x:Key="DangerDarkColor">#991B1B</Color>
+
+    <Color x:Key="InfoColor">#3B82F6</Color>
+    <Color x:Key="InfoLightColor">#DBEAFE</Color>
+    <Color x:Key="InfoDarkColor">#1E40AF</Color>
+
+    <!-- ========================================== -->
+    <!-- Neutral Palette (Zinc Scale)               -->
+    <!-- ========================================== -->
+    <Color x:Key="Zinc50Color">#FAFAFA</Color>
+    <Color x:Key="Zinc100Color">#F4F4F5</Color>
+    <Color x:Key="Zinc200Color">#E4E4E7</Color>
+    <Color x:Key="Zinc300Color">#D4D4D8</Color>
+    <Color x:Key="Zinc400Color">#A1A1AA</Color>
+    <Color x:Key="Zinc500Color">#71717A</Color>
+    <Color x:Key="Zinc600Color">#52525B</Color>
+    <Color x:Key="Zinc700Color">#3F3F46</Color>
+    <Color x:Key="Zinc800Color">#27272A</Color>
+    <Color x:Key="Zinc900Color">#18181B</Color>
+    <Color x:Key="Zinc950Color">#09090B</Color>
+
+    <!-- ========================================== -->
+    <!-- Semantic Brushes                           -->
+    <!-- ========================================== -->
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
+    <SolidColorBrush x:Key="PrimaryHoverBrush" Color="{StaticResource PrimaryHoverColor}"/>
+    <SolidColorBrush x:Key="PrimaryPressedBrush" Color="{StaticResource PrimaryPressedColor}"/>
+    <SolidColorBrush x:Key="PrimaryLightBrush" Color="{StaticResource PrimaryLightColor}"/>
+
+    <SolidColorBrush x:Key="SuccessBrush" Color="{StaticResource SuccessColor}"/>
+    <SolidColorBrush x:Key="SuccessLightBrush" Color="{StaticResource SuccessLightColor}"/>
+    <SolidColorBrush x:Key="SuccessDarkBrush" Color="{StaticResource SuccessDarkColor}"/>
+
+    <SolidColorBrush x:Key="WarningBrush" Color="{StaticResource WarningColor}"/>
+    <SolidColorBrush x:Key="WarningLightBrush" Color="{StaticResource WarningLightColor}"/>
+    <SolidColorBrush x:Key="WarningDarkBrush" Color="{StaticResource WarningDarkColor}"/>
+
+    <SolidColorBrush x:Key="DangerBrush" Color="{StaticResource DangerColor}"/>
+    <SolidColorBrush x:Key="DangerLightBrush" Color="{StaticResource DangerLightColor}"/>
+    <SolidColorBrush x:Key="DangerDarkBrush" Color="{StaticResource DangerDarkColor}"/>
+
+    <SolidColorBrush x:Key="InfoBrush" Color="{StaticResource InfoColor}"/>
+    <SolidColorBrush x:Key="InfoLightBrush" Color="{StaticResource InfoLightColor}"/>
+
+    <!-- ========================================== -->
+    <!-- Surface / Background / Border              -->
+    <!-- ========================================== -->
+    <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource Zinc50Color}"/>
+    <SolidColorBrush x:Key="SurfaceBrush" Color="White"/>
+    <SolidColorBrush x:Key="SurfaceAltBrush" Color="{StaticResource Zinc100Color}"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource Zinc200Color}"/>
+    <SolidColorBrush x:Key="BorderLightBrush" Color="{StaticResource Zinc100Color}"/>
+
+    <!-- ========================================== -->
+    <!-- Text Brushes                               -->
+    <!-- ========================================== -->
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource Zinc950Color}"/>
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource Zinc600Color}"/>
+    <SolidColorBrush x:Key="TextMutedBrush" Color="{StaticResource Zinc400Color}"/>
+    <SolidColorBrush x:Key="TextOnPrimaryBrush" Color="White"/>
+
+    <!-- ========================================== -->
+    <!-- Numeric Tokens (Spacing & Radius)          -->
+    <!-- ========================================== -->
+    <sys:Double x:Key="SpaceXs">4</sys:Double>
+    <sys:Double x:Key="SpaceSm">8</sys:Double>
+    <sys:Double x:Key="SpaceMd">12</sys:Double>
+    <sys:Double x:Key="SpaceLg">16</sys:Double>
+    <sys:Double x:Key="SpaceXl">24</sys:Double>
+    <sys:Double x:Key="Space2xl">32</sys:Double>
+
+    <CornerRadius x:Key="RadiusSm">6</CornerRadius>
+    <CornerRadius x:Key="RadiusMd">8</CornerRadius>
+    <CornerRadius x:Key="RadiusLg">12</CornerRadius>
+    <CornerRadius x:Key="RadiusFull">9999</CornerRadius>
+
+</ResourceDictionary>

@@ -4,5 +4,11 @@
              xmlns:local="clr-namespace:UsbDiskDoctor.App"
              ShutdownMode="OnMainWindowClose">
     <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/Colors.xaml"/>
+                <ResourceDictionary Source="Styles/Typography.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
