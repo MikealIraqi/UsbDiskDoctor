@@ -230,3 +230,22 @@ UsbDiskDoctor v1.3.0 production-ready.
 صنع بـ قلب في العراق.
 
 *HANDOFF v1.3.0 - آخر تحديث 2026-10-06*
+
+### دروس إضافية (2026-10-06)
+
+**Set-Location vs .NET CWD**:
+- Set-Location يغير $PWD فقط
+- [System.IO.File]::ReadAllText يستخدم .NET Process CWD (ثابت = C:\Windows\system32)
+- الحل: مسارات absolute دائماً مع System.IO.*
+
+**PowerShell script chunks**:
+- سكربت PowerShell > 50 سطر بـ here-string = خطر paste truncation
+- الحل: [string[]]$lines + AppendAllLines
+
+**Git glob pattern**:
+- استخدم wildcard واسع، تحقق من git status قبل commit
+- CapacityCheck*.cs لا يطابق CapacityVerdict.cs
+
+**Knowledge tests sync**:
+- عند إضافة مقالة جديدة، حدّث JsonKnowledgeServiceTests
+- 3 اختبارات تعتمد على عدد المقالات الثابت
