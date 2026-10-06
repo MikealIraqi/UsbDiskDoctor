@@ -10,15 +10,15 @@ namespace UsbDiskDoctor.Core.Tests.Knowledge
     public class JsonKnowledgeServiceTests
     {
         [Fact]
-        public void Load_ReturnsEightArticles()
+        public void Load_ReturnsNineArticles()
         {
             var sut = new JsonKnowledgeService();
 
             var count = sut.Load();
 
-            Assert.Equal(8, count);
+            Assert.Equal(9, count);
             Assert.True(sut.IsLoaded);
-            Assert.Equal(8, sut.ArticleCount);
+            Assert.Equal(9, sut.ArticleCount);
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace UsbDiskDoctor.Core.Tests.Knowledge
             var secondCall = sut.Load();
 
             Assert.Equal(firstCall, secondCall);
-            Assert.Equal(8, secondCall);
+            Assert.Equal(9, secondCall);
         }
 
         [Fact]
@@ -83,13 +83,13 @@ namespace UsbDiskDoctor.Core.Tests.Knowledge
         }
 
         [Fact]
-        public void GetAllArticles_ReturnsAllEightArticles()
+        public void GetAllArticles_ReturnsAllNineArticles()
         {
             var sut = new JsonKnowledgeService();
 
             var allArticles = sut.GetAllArticles();
 
-            Assert.Equal(8, allArticles.Count);
+            Assert.Equal(9, allArticles.Count);
         }
 
         [Fact]

@@ -184,5 +184,29 @@
       "RAW partition recovery",
       "TestDisk partition recovery"
     ]
+  },
+  {
+    "code": "FAKE_FLASH_CAPACITY",
+    "titleAr": "فلاشة USB مزيفة (سعة وهمية)",
+    "titleEn": "Fake USB Flash Capacity",
+    "causeAr": "الفيرموير الداخلي للفلاشة يعلن سعة أكبر من الشريحة الفيزيائية الفعلية. عند تجاوز السعة الحقيقية، تبدأ الكتابة من البداية وتمحو البيانات الأقدم دون إشعار المستخدم.",
+    "causeEn": "The device firmware reports a larger capacity than the physical flash chip actually contains. Once the real capacity is exceeded, writes wrap around and silently overwrite older data.",
+    "safeActions": [
+      "اختبر السعة الحقيقية بأداة مثل UsbDiskDoctor أو H2testw قبل الاعتماد على الفلاشة.",
+      "احفظ البيانات المهمة على وحدة تخزين موثوقة أخرى.",
+      "استخدم الفلاشة فقط لبيانات مؤقتة ضمن حدود السعة الحقيقية المكتشفة.",
+      "أعد المنتج للبائع إذا أثبتت الأداة أن السعة مزيفة."
+    ],
+    "dangerousActions": [
+      "الاعتماد على الفلاشة للنسخ الاحتياطي.",
+      "تخزين صور فوتوغرافية أو مستندات لا يمكن تعويضها.",
+      "محاولة تهيئة الفلاشة بأدوات قياسية قد لا تحل المشكلة لأن العطل في الفيرموير نفسه."
+    ],
+    "requiresConfirmation": false,
+    "externalSearchKeywords": [
+      "fake USB flash drive",
+      "H2testw capacity test",
+      "USB drive counterfeit capacity"
+    ]
   }
 ]

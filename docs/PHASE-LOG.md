@@ -67,3 +67,80 @@
 - docs/user-guide.md
 - أيقونة (اختياري)
 - Final commit + Tag v1.0.0
+
+---
+
+## Phase 12 — Final Package (v1.0.0) ✅
+- dotnet publish single-file win-x64 (68 MB)
+- README.md + docs/user-guide.md
+- .gitattributes (LF/CRLF)
+- Tag v1.0.0
+
+---
+
+## Phase 13 — UI Modernization (v1.1.0) ✅
+- Design System "Nebula Light" (Indigo + Zinc)
+- Design Tokens + 3 Button Styles + Badges
+- TabControl + ListView + ColumnHeader حديثة
+- MainWindow redesign كامل
+- كل الستايلات inline في App.xaml
+- Tag v1.1.0
+
+---
+
+## Phase 14 — Fake Capacity Check (v1.2.0) ✅
+
+### 14.1 — Contracts ✅
+- 3 enums + 4 records + IFakeCapacityChecker
+- Commit ccde0cb
+
+### 14.2 — Implementation ✅
+- FakeCapacityChecker (18808 bytes)
+- Wraparound detection عبر magic header + blockIndex
+- FileOptions.WriteThrough | Asynchronous
+- 3 طبقات أمان: same-volume, non-empty, block-size
+- Commit 8babe70
+
+### 14.3a — Testability Refactor ✅
+- 3 methods internal static: ComputeSampleIndices, ComputeActualCapacity, BuildBlock/ParseBlockIndex
+- InternalsVisibleTo UsbDiskDoctor.Core.Tests
+- Commit b253592
+
+### 14.3b — Unit Tests (20) ✅
+- Guards + Paths + SampleIndices + ActualCapacity + Block
+- 20/20 ناجح
+- Commit 2514f46
+
+### 14.4a — ViewModel + App.Tests ✅
+- مشروع اختبار جديد: UsbDiskDoctor.App.Tests (net8.0-windows, UseWPF)
+- CapacityCheckViewModel + 12 اختبار
+- Commit 6faf323
+
+### 14.4b-1 — Plumbing ✅
+- FakeCapacityChecker يُنشأ في App.xaml.cs
+- يمرر عبر MainViewModel إلى DeviceDetailsViewModel
+- Commit 311dcf7
+
+### 14.4b-2 — UI Section ✅
+- HexColorToBrushConverter
+- 3 resources في App.xaml (BoolToVis + HexToBrush)
+- قسم كامل في MainWindow.xaml (ComboBox + Progress + Result)
+- Commit ca492f3
+
+### 14.4c — Docs + Release ✅
+- Knowledge article: FAKE_FLASH_CAPACITY
+- README + PHASE-LOG محدّثان
+- Version bump: v1.2.0
+- Tag v1.2.0
+
+---
+
+## 📊 الإحصائيات بعد v1.2.0
+
+- مشاريع .NET: 10 (7 src + 3 tests)
+- اختبارات ناجحة: 113
+  - Core.Tests: 55
+  - Diagnostics.Tests: 46
+  - App.Tests: 12
+- مقالات Knowledge: 9
+- NuGet packages: 7 (بلا تغيير)
