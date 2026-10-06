@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:recModels="clr-namespace:UsbDiskDoctor.Recovery.Models;assembly=UsbDiskDoctor.Recovery"
         xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         mc:Ignorable="d"
         Title="UsbDiskDoctor — أداة فحص أقراص USB"
@@ -302,6 +303,133 @@
                                     </GridView>
                                 </ListView.View>
                             </ListView>
+                        <!-- FAKE CAPACITY CHECK SECTION -->
+                        <Border Background="{StaticResource SurfaceAltBrush}"
+                                BorderBrush="{StaticResource BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="12"
+                                Padding="20"
+                                Margin="0,24,0,0"
+                                Visibility="{Binding HasCapacityCheck, Converter={StaticResource BoolToVis}}">
+                            <StackPanel DataContext="{Binding CapacityCheck}">
+                                <!-- Header -->
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                    <TextBlock Text="🔍" FontSize="18" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="فحص السعة الحقيقية" Style="{StaticResource TextH3}"/>
+                                </StackPanel>
+                                <TextBlock Text="يكتب أنماط اختبار على القرص ثم يقرأها للتحقق من السعة الحقيقية. يكشف الفلاشات المزيفة التي تعلن سعة أكبر مما فيها."
+                                           Style="{StaticResource TextSecondary}"
+                                           TextWrapping="Wrap"
+                                           Margin="0,0,0,16"/>
+
+                                <!-- Controls row -->
+                                <Grid Margin="0,0,0,16">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <TextBlock Text="الوضع:" Style="{StaticResource TextLabel}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                        <ComboBox SelectedValue="{Binding SelectedMode, Mode=TwoWay}"
+                                                  SelectedValuePath="Tag"
+                                                  MinWidth="140"
+                                                  FontFamily="{StaticResource PrimaryFontFamily}"
+                                                  FontSize="13"
+                                                  Padding="10,6">
+                                            <ComboBoxItem Content="سريع" Tag="{x:Static recModels:CapacityCheckMode.Quick}"/>
+                                            <ComboBoxItem Content="ذكي (افتراضي)" Tag="{x:Static recModels:CapacityCheckMode.Smart}"/>
+                                            <ComboBoxItem Content="كامل" Tag="{x:Static recModels:CapacityCheckMode.Full}"/>
+                                        </ComboBox>
+                                    </StackPanel>
+
+                                    <CheckBox Grid.Column="1"
+                                              Content="السماح بالكتابة على وحدة غير فارغة"
+                                              IsChecked="{Binding AllowWriteOnNonEmpty, Mode=TwoWay}"
+                                              Foreground="{StaticResource TextSecondaryBrush}"
+                                              FontFamily="{StaticResource PrimaryFontFamily}"
+                                              FontSize="12"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              Margin="20,0"/>
+
+                                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                        <Button Content="إلغاء"
+                                                Style="{StaticResource SecondaryButton}"
+                                                Command="{Binding CancelCheckCommand}"
+                                                Padding="14,8"
+                                                Margin="0,0,8,0"/>
+                                        <Button Content="▶ بدء الفحص"
+                                                Style="{StaticResource PrimaryButton}"
+                                                Command="{Binding StartCheckCommand}"
+                                                Padding="14,8"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <!-- Progress card (visible while running) -->
+                                <Border Background="{StaticResource SurfaceBrush}"
+                                        BorderBrush="{StaticResource BorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        Padding="16"
+                                        Margin="0,0,0,12"
+                                        Visibility="{Binding IsRunning, Converter={StaticResource BoolToVis}}">
+                                    <StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="{Binding CurrentPhaseText}" Style="{StaticResource TextBody}" FontWeight="Medium"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding PercentComplete, StringFormat={}{0:F1}%}" Style="{StaticResource TextBody}" FontWeight="SemiBold" Foreground="{StaticResource PrimaryBrush}"/>
+                                        </Grid>
+
+                                        <ProgressBar Value="{Binding PercentComplete}"
+                                                     Minimum="0" Maximum="100"
+                                                     Height="8"
+                                                     Margin="0,8,0,12"
+                                                     Background="{StaticResource SurfaceAltBrush}"
+                                                     Foreground="{StaticResource PrimaryBrush}"
+                                                     BorderThickness="0"/>
+
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="⚡" Style="{StaticResource TextSecondary}" Margin="0,0,4,0"/>
+                                            <TextBlock Text="{Binding SpeedText}" Style="{StaticResource TextSecondary}" FontWeight="Medium" Margin="0,0,16,0"/>
+                                            <TextBlock Text="⏱" Style="{StaticResource TextSecondary}" Margin="0,0,4,0"/>
+                                            <TextBlock Text="{Binding ElapsedText}" Style="{StaticResource TextSecondary}" FontWeight="Medium" Margin="0,0,16,0"/>
+                                            <TextBlock Text="⏳" Style="{StaticResource TextSecondary}" Margin="0,0,4,0"/>
+                                            <TextBlock Text="{Binding EtaText}" Style="{StaticResource TextSecondary}" FontWeight="Medium"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Result card (visible when HasResult) -->
+                                <Border Background="{StaticResource SurfaceBrush}"
+                                        BorderBrush="{StaticResource BorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        Padding="16"
+                                        Visibility="{Binding HasResult, Converter={StaticResource BoolToVis}}">
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                            <Ellipse Width="10" Height="10"
+                                                     Fill="{Binding VerdictColorHex, Converter={StaticResource HexToBrush}}"
+                                                     VerticalAlignment="Center"
+                                                     Margin="0,0,10,0"/>
+                                            <TextBlock Text="{Binding VerdictText}"
+                                                       Style="{StaticResource TextH3}"
+                                                       Foreground="{Binding VerdictColorHex, Converter={StaticResource HexToBrush}}"/>
+                                        </StackPanel>
+                                        <TextBlock Text="{Binding DiagnosticMessage}"
+                                                   Style="{StaticResource TextSecondary}"
+                                                   TextWrapping="Wrap"
+                                                   FontFamily="{StaticResource MonoFontFamily}"
+                                                   FontSize="11"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
                         </StackPanel>
                     </ScrollViewer>
                 </Border>
