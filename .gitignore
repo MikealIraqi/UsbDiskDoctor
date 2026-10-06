@@ -41,3 +41,6 @@ reports/*
 # Release archives
 UsbDiskDoctor-v*.zip
 *.zip
+
+# Installer output
+publish-installer/
