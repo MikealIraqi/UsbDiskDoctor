@@ -7,6 +7,7 @@
         xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         mc:Ignorable="d"
         Title="UsbDiskDoctor — أداة فحص أقراص USB"
+        Icon="/Assets/app.ico"
         Width="1100"
         Height="720"
         MinWidth="900"
@@ -63,6 +64,12 @@
 
                 <!-- Action buttons -->
                 <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                        <Button AutomationProperties.Name="فتح نافذة للتواصل"
+                                                Content="للتواصل"
+                                                Style="{StaticResource GhostButton}"
+                                                Margin="0,0,8,0"
+                                                Click="OnContactClicked"
+                                                ToolTip="معلومات التواصل"/>
                     <Button Content="خروج"
                             Style="{StaticResource GhostButton}"
                             Margin="0,0,8,0"

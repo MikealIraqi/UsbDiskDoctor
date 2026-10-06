@@ -91,6 +91,13 @@ namespace UsbDiskDoctor.App
             }
         }
 
+                private void OnContactClicked(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Views.ContactWindow { Owner = this };
+            dialog.ShowDialog();
+        }
+
+
         private void OnExitClicked(object sender, RoutedEventArgs e)
         {
             Close();
