@@ -39,10 +39,12 @@ Source: "..\publish\UsbDiskDoctor.App.exe"; DestDir: "{app}"; Flags: ignoreversi
 Source: "..\publish\*.dll"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist
 Source: "..\publish\*.xml"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist
 Source: "..\assets\icon-source\48.ico"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\installer\README.txt"; DestDir: "{app}"; Flags: ignoreversion isreadme
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\48.ico"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
+Name: "{group}\اقرأني"; Filename: "{app}\README.txt"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\48.ico"; Tasks: desktopicon
 
 [Run]

@@ -70,6 +70,7 @@
                                                 Margin="0,0,8,0"
                                                 Click="OnContactClicked"
                                                 ToolTip="معلومات التواصل"/>
+                                        <Button Content="حول" Style="{StaticResource GhostButton}" Margin="0,0,8,0" Click="OnAboutClicked" ToolTip="حول البرنامج"/>
                     <Button Content="خروج"
                             Style="{StaticResource GhostButton}"
                             Margin="0,0,8,0"
