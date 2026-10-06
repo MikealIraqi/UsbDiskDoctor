@@ -14,4 +14,8 @@
     <PackageReference Include="System.Management" Version="10.0.12" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="UsbDiskDoctor.Diagnostics.Tests" />
+  </ItemGroup>
+
 </Project>

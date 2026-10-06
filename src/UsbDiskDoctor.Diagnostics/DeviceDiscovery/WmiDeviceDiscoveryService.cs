@@ -67,6 +67,7 @@ namespace UsbDiskDoctor.Diagnostics.DeviceDiscovery
             CancellationToken cancellationToken)
         {
             var query = "SELECT * FROM Win32_DiskDrive";
+            var msftMediaTypes = QueryAllMsftMediaTypes();
 
             var devices = new List<DeviceSummary>();
 
@@ -123,7 +124,7 @@ namespace UsbDiskDoctor.Diagnostics.DeviceDiscovery
                     Model = model,
                     SerialNumber = serialNumber,
                     BusType = busType,
-                    MediaType = MediaType.Unknown,
+                    MediaType = DetermineMediaType(deviceId, mediaType, msftMediaTypes),
                     PartitionStyle = PartitionStyle.Unknown,
                     SizeBytes = sizeBytes,
                     HealthStatus = HealthStatus.Unknown,
@@ -197,6 +198,126 @@ namespace UsbDiskDoctor.Diagnostics.DeviceDiscovery
             }
 
             return BusType.Unknown;
+        }
+
+        /// <summary>
+        /// Extracts the numeric physical drive index from a device ID like <c>\\.\PHYSICALDRIVE0</c>.
+        /// </summary>
+        /// <param name="deviceId">Raw Win32_DiskDrive.DeviceID value.</param>
+        /// <returns>Numeric string (e.g. "0") or <c>null</c> if the format is not recognized.</returns>
+        internal static string? ExtractPhysicalDriveNumber(string? deviceId)
+        {
+            if (string.IsNullOrWhiteSpace(deviceId))
+            {
+                return null;
+            }
+
+            const string prefix = @"\\.\PHYSICALDRIVE";
+            if (!deviceId.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+
+            var digits = new string(deviceId.Substring(prefix.Length).TakeWhile(char.IsDigit).ToArray());
+            return string.IsNullOrEmpty(digits) ? null : digits;
+        }
+
+        /// <summary>
+        /// Maps a Win32_DiskDrive.MediaType string to the MediaType enum.
+        /// </summary>
+        internal static MediaType MapWmiMediaTypeString(string? wmiMediaType)
+        {
+            if (string.IsNullOrWhiteSpace(wmiMediaType))
+            {
+                return MediaType.Unknown;
+            }
+
+            if (wmiMediaType.IndexOf("Removable", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                return MediaType.Flash;
+            }
+
+            if (wmiMediaType.IndexOf("External hard disk", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                return MediaType.HDD;
+            }
+
+            if (wmiMediaType.IndexOf("Fixed hard disk", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                return MediaType.HDD;
+            }
+
+            if (wmiMediaType.IndexOf("Solid State", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                return MediaType.SSD;
+            }
+
+            return MediaType.Unknown;
+        }
+
+        /// <summary>
+        /// Maps an MSFT_PhysicalDisk.MediaType code to the MediaType enum. Codes: 0=Unspecified, 3=HDD, 4=SSD, 5=SCM.
+        /// </summary>
+        internal static MediaType MapMsftMediaTypeCode(ushort code)
+        {
+            return code switch
+            {
+                3 => MediaType.HDD,
+                4 => MediaType.SSD,
+                5 => MediaType.SCM,
+                _ => MediaType.Unknown
+            };
+        }
+
+        /// <summary>
+        /// Queries MSFT_PhysicalDisk once for all disks, returning a dictionary keyed by physical drive number.
+        /// Fail-soft: returns an empty dictionary on any error.
+        /// </summary>
+        private static Dictionary<string, MediaType> QueryAllMsftMediaTypes()
+        {
+            var result = new Dictionary<string, MediaType>(StringComparer.OrdinalIgnoreCase);
+            try
+            {
+                var scope = new ManagementScope(@"\\.\root\Microsoft\Windows\Storage");
+                scope.Connect();
+                var query = new ObjectQuery("SELECT DeviceId, MediaType FROM MSFT_PhysicalDisk");
+                using var searcher = new ManagementObjectSearcher(scope, query);
+                using var results = searcher.Get();
+                foreach (ManagementObject disk in results)
+                {
+                    var deviceId = disk["DeviceId"]?.ToString();
+                    var mediaTypeRaw = disk["MediaType"];
+                    if (deviceId is null || mediaTypeRaw is null)
+                    {
+                        continue;
+                    }
+                    if (ushort.TryParse(mediaTypeRaw.ToString(), out var code))
+                    {
+                        result[deviceId] = MapMsftMediaTypeCode(code);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Debug(ex, "MSFT_PhysicalDisk query failed; falling back to WMI string-based detection.");
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Determines the media type using the MSFT_PhysicalDisk cache first, falling back to the WMI string.
+        /// </summary>
+        private static MediaType DetermineMediaType(
+            string deviceId,
+            string wmiMediaType,
+            IReadOnlyDictionary<string, MediaType> msftCache)
+        {
+            var number = ExtractPhysicalDriveNumber(deviceId);
+            if (number is not null && msftCache.TryGetValue(number, out var cached) && cached != MediaType.Unknown)
+            {
+                return cached;
+            }
+            return MapWmiMediaTypeString(wmiMediaType);
         }
 
         private static string GetString(ManagementBaseObject obj, string propertyName)
