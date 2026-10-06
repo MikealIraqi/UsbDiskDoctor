@@ -48,7 +48,7 @@
                     <TextBlock Text="UsbDiskDoctor"
                                Style="{StaticResource TextH2}"
                                VerticalAlignment="Center"/>
-                    <TextBlock Text="v1.3.0"
+                    <TextBlock Text="v1.3.1"
                                Style="{StaticResource TextTiny}"
                                Margin="10,3,0,0"
                                VerticalAlignment="Center"/>
@@ -565,7 +565,7 @@
 
                 <!-- Version -->
                 <TextBlock Grid.Column="2"
-                           Text="v1.3.0"
+                           Text="v1.3.1"
                            Style="{StaticResource TextTiny}"
                            VerticalAlignment="Center"/>
             </Grid>
