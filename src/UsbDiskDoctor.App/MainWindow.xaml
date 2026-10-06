@@ -6,9 +6,14 @@
         xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         mc:Ignorable="d"
         Title="UsbDiskDoctor — أداة فحص أقراص USB"
-        Width="1000"
-        Height="700"
-        WindowStartupLocation="CenterScreen">
+        Width="1100"
+        Height="720"
+        MinWidth="900"
+        MinHeight="600"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BackgroundBrush}"
+        FontFamily="{StaticResource PrimaryFontFamily}">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -16,199 +21,351 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- شريط الأدوات العلوي -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
-            <Button Content="تحديث"
-                    Command="{Binding RefreshCommand}"
-                    Padding="20,5"
-                    Margin="0,0,10,0"/>
-            <Button Content="فحص كامل"
-                    Command="{Binding RunFullDiagnosticCommand}"
-                    Padding="20,5"
-                    Margin="0,0,10,0"/>
-            <TextBlock Text="{Binding StatusMessage}"
-                       VerticalAlignment="Center"
-                       FontSize="14"/>
-        </StackPanel>
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- HEADER                                       -->
+        <!-- ═══════════════════════════════════════════ -->
+        <Border Grid.Row="0"
+                Background="{StaticResource SurfaceBrush}"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="0,0,0,1"
+                Padding="20,14">
+            <Grid FlowDirection="RightToLeft">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-        <!-- التبويبات -->
-        <TabControl Grid.Row="1" Margin="10,0,10,0">
+                <!-- App title -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="⚡"
+                               FontSize="22"
+                               Foreground="{StaticResource PrimaryBrush}"
+                               Margin="0,0,10,0"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Text="UsbDiskDoctor"
+                               Style="{StaticResource TextH2}"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Text="v1.1.0"
+                               Style="{StaticResource TextTiny}"
+                               Margin="10,3,0,0"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
 
-            <!-- تبويب: قائمة الأجهزة -->
+                <!-- Status Message -->
+                <TextBlock Grid.Column="1"
+                           Text="{Binding StatusMessage}"
+                           Style="{StaticResource TextSecondary}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Margin="20,0"/>
+
+                <!-- Action buttons -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <Button Content="خروج"
+                            Style="{StaticResource GhostButton}"
+                            Margin="0,0,8,0"
+                            Click="OnExitClicked"
+                            ToolTip="إغلاق التطبيق"/>
+                    <Button Content="فحص كامل"
+                            Style="{StaticResource SecondaryButton}"
+                            Command="{Binding RunFullDiagnosticCommand}"
+                            Margin="0,0,8,0"/>
+                    <Button Content="تحديث"
+                            Style="{StaticResource PrimaryButton}"
+                            Command="{Binding RefreshCommand}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- MAIN CONTENT (TABS)                          -->
+        <!-- ═══════════════════════════════════════════ -->
+        <TabControl Grid.Row="1"
+                    Margin="20"
+                    Background="Transparent"
+                    BorderThickness="0">
+            <TabControl.Resources>
+                <Style TargetType="TabItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Border x:Name="tabBorder"
+                                        Background="Transparent"
+                                        CornerRadius="8"
+                                        Padding="18,8"
+                                        Margin="0,0,6,0">
+                                    <ContentPresenter ContentSource="Header"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="tabBorder" Property="Background"
+                                                Value="{StaticResource PrimaryLightBrush}"/>
+                                        <Setter Property="Foreground"
+                                                Value="{StaticResource PrimaryBrush}"/>
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter Property="Foreground"
+                                                Value="{StaticResource TextSecondaryBrush}"/>
+                                    </Trigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsSelected" Value="False"/>
+                                            <Condition Property="IsMouseOver" Value="True"/>
+                                        </MultiTrigger.Conditions>
+                                        <Setter TargetName="tabBorder" Property="Background"
+                                                Value="{StaticResource SurfaceAltBrush}"/>
+                                    </MultiTrigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="FontFamily" Value="{StaticResource PrimaryFontFamily}"/>
+                    <Setter Property="FontSize" Value="{StaticResource FontSizeBody}"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Style>
+            </TabControl.Resources>
+
+            <!-- ═════════ TAB 1: الأجهزة ═════════ -->
             <TabItem Header="الأجهزة">
-                <ListView ItemsSource="{Binding Devices}"
-                          SelectedItem="{Binding SelectedDevice}"
-                          Margin="5">
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="اسم الجهاز" DisplayMemberBinding="{Binding FriendlyName}" Width="220"/>
-                            <GridViewColumn Header="معرف الجهاز" DisplayMemberBinding="{Binding DeviceId}" Width="180"/>
-                            <GridViewColumn Header="الحجم (بايت)" DisplayMemberBinding="{Binding SizeBytes}" Width="150"/>
-                            <GridViewColumn Header="الحالة" DisplayMemberBinding="{Binding OperationalStatus}" Width="130"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                <Border Background="{StaticResource SurfaceBrush}"
+                        BorderBrush="{StaticResource BorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="12"
+                        Margin="0,12,0,0">
+                    <ListView ItemsSource="{Binding Devices}"
+                              SelectedItem="{Binding SelectedDevice}"
+                              BorderThickness="0"
+                              Background="Transparent"
+                              Padding="8">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="Padding" Value="12,10"/>
+                                <Setter Property="Margin" Value="0,2"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListViewItem">
+                                            <Border x:Name="itemBorder"
+                                                    Background="Transparent"
+                                                    CornerRadius="8"
+                                                    Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="itemBorder" Property="Background"
+                                                            Value="{StaticResource SurfaceAltBrush}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter TargetName="itemBorder" Property="Background"
+                                                            Value="{StaticResource PrimaryLightBrush}"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="اسم الجهاز" DisplayMemberBinding="{Binding FriendlyName}" Width="260"/>
+                                <GridViewColumn Header="معرف الجهاز" DisplayMemberBinding="{Binding DeviceId}" Width="200"/>
+                                <GridViewColumn Header="الحجم (بايت)" DisplayMemberBinding="{Binding SizeBytes}" Width="160"/>
+                                <GridViewColumn Header="الحالة" DisplayMemberBinding="{Binding OperationalStatus}" Width="140"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Border>
             </TabItem>
 
-            <!-- تبويب: تفاصيل الجهاز -->
+            <!-- ═════════ TAB 2: التفاصيل ═════════ -->
             <TabItem Header="التفاصيل">
-                <ScrollViewer VerticalScrollBarVisibility="Auto"
-                              DataContext="{Binding DetailsViewModel}">
-                    <StackPanel Margin="15">
+                <Border Background="{StaticResource SurfaceBrush}"
+                        BorderBrush="{StaticResource BorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="12"
+                        Margin="0,12,0,0">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  DataContext="{Binding DetailsViewModel}"
+                                  Padding="20">
+                        <StackPanel>
+                            <TextBlock Text="{Binding FriendlyName}"
+                                       Style="{StaticResource TextH1}"
+                                       Margin="0,0,0,20"/>
 
-                        <TextBlock Text="{Binding FriendlyName}"
-                                   FontSize="20"
-                                   FontWeight="Bold"
-                                   Margin="0,0,0,15"/>
+                            <TextBlock Text="معلومات عامة"
+                                       Style="{StaticResource TextH3}"
+                                       Margin="0,0,0,12"/>
 
-                        <TextBlock Text="معلومات عامة"
-                                   FontSize="14"
-                                   FontWeight="SemiBold"
-                                   Margin="0,0,0,8"/>
+                            <Grid Margin="0,0,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="160"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
 
-                        <Grid Margin="0,0,0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="معرف الجهاز:" Style="{StaticResource TextLabel}" Margin="0,4"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding DeviceIdText}" Style="{StaticResource TextBody}" Margin="0,4"/>
 
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="معرف الجهاز:" FontWeight="SemiBold" Margin="0,2"/>
-                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding DeviceIdText}" Margin="0,2"/>
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="الموديل:" Style="{StaticResource TextLabel}" Margin="0,4"/>
+                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ModelText}" Style="{StaticResource TextBody}" Margin="0,4"/>
 
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="الموديل:" FontWeight="SemiBold" Margin="0,2"/>
-                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ModelText}" Margin="0,2"/>
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="الرقم التسلسلي:" Style="{StaticResource TextLabel}" Margin="0,4"/>
+                                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SerialNumberText}" Style="{StaticResource TextBody}" Margin="0,4"/>
 
-                            <TextBlock Grid.Row="2" Grid.Column="0" Text="الرقم التسلسلي:" FontWeight="SemiBold" Margin="0,2"/>
-                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SerialNumberText}" Margin="0,2"/>
+                                <TextBlock Grid.Row="3" Grid.Column="0" Text="نوع الناقل:" Style="{StaticResource TextLabel}" Margin="0,4"/>
+                                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding BusTypeText}" Style="{StaticResource TextBody}" Margin="0,4"/>
 
-                            <TextBlock Grid.Row="3" Grid.Column="0" Text="نوع الناقل:" FontWeight="SemiBold" Margin="0,2"/>
-                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding BusTypeText}" Margin="0,2"/>
+                                <TextBlock Grid.Row="4" Grid.Column="0" Text="نوع الوسائط:" Style="{StaticResource TextLabel}" Margin="0,4"/>
+                                <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding MediaTypeText}" Style="{StaticResource TextBody}" Margin="0,4"/>
 
-                            <TextBlock Grid.Row="4" Grid.Column="0" Text="نوع الوسائط:" FontWeight="SemiBold" Margin="0,2"/>
-                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding MediaTypeText}" Margin="0,2"/>
+                                <TextBlock Grid.Row="5" Grid.Column="0" Text="نمط التقسيم:" Style="{StaticResource TextLabel}" Margin="0,4"/>
+                                <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding PartitionStyleText}" Style="{StaticResource TextBody}" Margin="0,4"/>
 
-                            <TextBlock Grid.Row="5" Grid.Column="0" Text="نمط التقسيم:" FontWeight="SemiBold" Margin="0,2"/>
-                            <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding PartitionStyleText}" Margin="0,2"/>
+                                <TextBlock Grid.Row="6" Grid.Column="0" Text="الحجم:" Style="{StaticResource TextLabel}" Margin="0,4"/>
+                                <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding SizeText}" Style="{StaticResource TextBody}" Margin="0,4"/>
 
-                            <TextBlock Grid.Row="6" Grid.Column="0" Text="الحجم:" FontWeight="SemiBold" Margin="0,2"/>
-                            <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding SizeText}" Margin="0,2"/>
+                                <TextBlock Grid.Row="7" Grid.Column="0" Text="الحالة التشغيلية:" Style="{StaticResource TextLabel}" Margin="0,4"/>
+                                <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding OperationalStatusText}" Style="{StaticResource TextBody}" Margin="0,4"/>
 
-                            <TextBlock Grid.Row="7" Grid.Column="0" Text="الحالة التشغيلية:" FontWeight="SemiBold" Margin="0,2"/>
-                            <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding OperationalStatusText}" Margin="0,2"/>
+                                <TextBlock Grid.Row="8" Grid.Column="0" Text="الحالة الصحية:" Style="{StaticResource TextLabel}" Margin="0,4"/>
+                                <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding HealthStatusText}" Style="{StaticResource TextBody}" Margin="0,4"/>
+                            </Grid>
 
-                            <TextBlock Grid.Row="8" Grid.Column="0" Text="الحالة الصحية:" FontWeight="SemiBold" Margin="0,2"/>
-                            <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding HealthStatusText}" Margin="0,2"/>
-                        </Grid>
+                            <TextBlock Style="{StaticResource TextH3}" Margin="0,10,0,12">
+                                <Run Text="الفوليومات ("/>
+                                <Run Text="{Binding VolumesCountText, Mode=OneWay}"/>
+                                <Run Text=")"/>
+                            </TextBlock>
 
-                        <TextBlock FontSize="14"
-                                   FontWeight="SemiBold"
-                                   Margin="0,10,0,8">
-                            <Run Text="الفوليومات ("/>
-                            <Run Text="{Binding VolumesCountText, Mode=OneWay}"/>
-                            <Run Text=")"/>
-                        </TextBlock>
+                            <ListView ItemsSource="{Binding Volumes}"
+                                      MinHeight="100"
+                                      BorderThickness="0"
+                                      Background="Transparent">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="الحرف" DisplayMemberBinding="{Binding DriveLetter}" Width="60"/>
+                                        <GridViewColumn Header="الاسم" DisplayMemberBinding="{Binding Label}" Width="150"/>
+                                        <GridViewColumn Header="نظام الملفات" DisplayMemberBinding="{Binding FileSystem}" Width="120"/>
+                                        <GridViewColumn Header="الحجم (بايت)" DisplayMemberBinding="{Binding SizeBytes}" Width="130"/>
+                                        <GridViewColumn Header="متاح (بايت)" DisplayMemberBinding="{Binding FreeSpaceBytes}" Width="130"/>
+                                        <GridViewColumn Header="مُثبّت" DisplayMemberBinding="{Binding IsMounted}" Width="80"/>
+                                        <GridViewColumn Header="RAW" DisplayMemberBinding="{Binding IsRaw}" Width="70"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
 
-                        <ListView ItemsSource="{Binding Volumes}"
-                                  MinHeight="100">
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="الحرف" DisplayMemberBinding="{Binding DriveLetter}" Width="60"/>
-                                    <GridViewColumn Header="الاسم" DisplayMemberBinding="{Binding Label}" Width="140"/>
-                                    <GridViewColumn Header="نظام الملفات" DisplayMemberBinding="{Binding FileSystem}" Width="110"/>
-                                    <GridViewColumn Header="الحجم (بايت)" DisplayMemberBinding="{Binding SizeBytes}" Width="120"/>
-                                    <GridViewColumn Header="متاح (بايت)" DisplayMemberBinding="{Binding FreeSpaceBytes}" Width="120"/>
-                                    <GridViewColumn Header="مُثبّت" DisplayMemberBinding="{Binding IsMounted}" Width="70"/>
-                                    <GridViewColumn Header="RAW" DisplayMemberBinding="{Binding IsRaw}" Width="60"/>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
+                            <TextBlock Style="{StaticResource TextH3}" Margin="0,24,0,12">
+                                <Run Text="اقتراحات الإصلاح ("/>
+                                <Run Text="{Binding ProposalsCount, Mode=OneWay}"/>
+                                <Run Text=")"/>
+                            </TextBlock>
 
-                        <!-- اقتراحات الإصلاح -->
-                        <TextBlock FontSize="14"
-                                   FontWeight="SemiBold"
-                                   Margin="0,20,0,8">
-                            <Run Text="اقتراحات الإصلاح ("/>
-                            <Run Text="{Binding ProposalsCount, Mode=OneWay}"/>
-                            <Run Text=")"/>
-                        </TextBlock>
-
-                        <ListView ItemsSource="{Binding Proposals}"
-                                  MinHeight="120">
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="الإجراء" DisplayMemberBinding="{Binding ActionCode}" Width="220"/>
-                                    <GridViewColumn Header="المستوى" DisplayMemberBinding="{Binding RiskLevel}" Width="100"/>
-                                    <GridViewColumn Header="يحتاج تأكيد" DisplayMemberBinding="{Binding RequiresConfirmation}" Width="100"/>
-                                    <GridViewColumn Header="الوصف" DisplayMemberBinding="{Binding DescriptionAr}" Width="300"/>
-                                    <GridViewColumn Header="" Width="100">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Button Content="تنفيذ"
-                                                        Padding="10,3"
-                                                        Command="{Binding DataContext.RequestExecuteProposalCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                        CommandParameter="{Binding}"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-
-                    </StackPanel>
-                </ScrollViewer>
+                            <ListView ItemsSource="{Binding Proposals}"
+                                      MinHeight="140"
+                                      BorderThickness="0"
+                                      Background="Transparent">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="الإجراء" DisplayMemberBinding="{Binding ActionCode}" Width="240"/>
+                                        <GridViewColumn Header="المستوى" DisplayMemberBinding="{Binding RiskLevel}" Width="100"/>
+                                        <GridViewColumn Header="يحتاج تأكيد" DisplayMemberBinding="{Binding RequiresConfirmation}" Width="100"/>
+                                        <GridViewColumn Header="الوصف" DisplayMemberBinding="{Binding DescriptionAr}" Width="300"/>
+                                        <GridViewColumn Header="" Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Button Content="تنفيذ"
+                                                            Style="{StaticResource PrimaryButton}"
+                                                            Padding="12,4"
+                                                            Command="{Binding DataContext.RequestExecuteProposalCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                            CommandParameter="{Binding}"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
             </TabItem>
 
-            <!-- تبويب: التقرير -->
+            <!-- ═════════ TAB 3: التقرير ═════════ -->
             <TabItem Header="التقرير">
-                <Grid>
-                    <wv2:WebView2 x:Name="ReportWebView"/>
-                    <TextBlock Text="لا يوجد تقرير بعد. اختر جهازاً واضغط «فحص كامل»."
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               FontSize="16"
-                               Foreground="Gray"
-                               x:Name="ReportEmptyHint"/>
-                </Grid>
+                <Border Background="{StaticResource SurfaceBrush}"
+                        BorderBrush="{StaticResource BorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="12"
+                        Margin="0,12,0,0"
+                        Padding="1">
+                    <Grid>
+                        <wv2:WebView2 x:Name="ReportWebView"/>
+                        <TextBlock Text="لا يوجد تقرير بعد. اختر جهازاً واضغط «فحص كامل»."
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   FontSize="16"
+                                   Foreground="{StaticResource TextMutedBrush}"
+                                   x:Name="ReportEmptyHint"/>
+                    </Grid>
+                </Border>
             </TabItem>
         </TabControl>
 
-        <!-- شريط الحالة -->
-        <StatusBar Grid.Row="2">
-            <StatusBarItem>
-                <TextBlock Text="{Binding StatusMessage}"/>
-            </StatusBarItem>
-            <StatusBarItem HorizontalAlignment="Right">
-                <TextBlock>
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- STATUS BAR                                   -->
+        <!-- ═══════════════════════════════════════════ -->
+        <Border Grid.Row="2"
+                Background="{StaticResource SurfaceBrush}"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="0,1,0,0"
+                Padding="20,8">
+            <Grid FlowDirection="RightToLeft">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Status dot + text -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Ellipse Width="8" Height="8"
+                             Fill="{StaticResource SuccessBrush}"
+                             VerticalAlignment="Center"
+                             Margin="0,0,8,0"/>
+                    <TextBlock Text="Ready"
+                               Style="{StaticResource TextSecondary}"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Devices count -->
+                <TextBlock Grid.Column="1"
+                           HorizontalAlignment="Center"
+                           Style="{StaticResource TextSecondary}"
+                           VerticalAlignment="Center">
                     <Run Text="عدد الأجهزة: "/>
-                    <Run Text="{Binding Devices.Count, Mode=OneWay}"/>
+                    <Run Text="{Binding Devices.Count, Mode=OneWay}" FontWeight="SemiBold"/>
                 </TextBlock>
-            </StatusBarItem>
-        </StatusBar>
+
+                <!-- Version -->
+                <TextBlock Grid.Column="2"
+                           Text="v1.1.0"
+                           Style="{StaticResource TextTiny}"
+                           VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

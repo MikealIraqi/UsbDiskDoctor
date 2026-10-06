@@ -90,5 +90,10 @@ namespace UsbDiskDoctor.App
                 await _viewModel.ExecuteProposalAsync(proposal, dialog.ConfirmedToken, targetDriveLetter);
             }
         }
+
+        private void OnExitClicked(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
