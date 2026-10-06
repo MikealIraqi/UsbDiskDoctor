@@ -49,6 +49,9 @@ namespace UsbDiskDoctor.App.ViewModels
 
         public IReadOnlyList<VolumeInfo> Volumes => Device?.Volumes ?? Array.Empty<VolumeInfo>();
 
+        /// <summary>True when the selected device has no readable volumes.</summary>
+        public bool HasNoVolumes => Volumes.Count == 0;
+
         public ObservableCollection<RepairProposal> Proposals { get; } =
             new ObservableCollection<RepairProposal>();
 
@@ -97,6 +100,7 @@ namespace UsbDiskDoctor.App.ViewModels
             OnPropertyChanged(nameof(HealthStatusText));
             OnPropertyChanged(nameof(VolumesCountText));
             OnPropertyChanged(nameof(Volumes));
+            OnPropertyChanged(nameof(HasNoVolumes));
 
             RebuildCapacityCheck(value);
 

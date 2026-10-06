@@ -140,7 +140,9 @@
                         BorderThickness="1"
                         CornerRadius="12"
                         Margin="0,12,0,0">
-                    <ListView AutomationProperties.Name="قائمة أجهزة USB المتصلة"
+                                        <Grid>
+                        <!-- Devices empty state marker -->
+<ListView AutomationProperties.Name="قائمة أجهزة USB المتصلة"
                               ItemsSource="{Binding Devices}"
                               SelectedItem="{Binding SelectedDevice}"
                               BorderThickness="0"
@@ -187,6 +189,22 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
+                        <StackPanel Panel.ZIndex="10"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding HasNoDevices, Converter={StaticResource BoolToVis}}">
+                            <TextBlock Text="🔌" FontSize="48" HorizontalAlignment="Center" Opacity="0.35"/>
+                            <TextBlock Text="لا توجد أجهزة USB متصلة"
+                                       Style="{StaticResource TextH3}"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,12,0,4"/>
+                            <TextBlock Text="وصّل وحدة تخزين ثم اضغط «تحديث»"
+                                       Style="{StaticResource TextSecondary}"
+                                       Foreground="{StaticResource TextMutedBrush}"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
                 </Border>
             </TabItem>
 
@@ -260,7 +278,9 @@
                                 <Run Text=")"/>
                             </TextBlock>
 
-                            <ListView ItemsSource="{Binding Volumes}"
+                                                        <Grid>
+                                <!-- Volumes empty state marker -->
+<ListView ItemsSource="{Binding Volumes}"
                                       MinHeight="100"
                                       BorderThickness="0"
                                       Background="Transparent">
@@ -276,6 +296,13 @@
                                     </GridView>
                                 </ListView.View>
                             </ListView>
+                                <TextBlock Text="لا توجد فولومات مكتشفة"
+                                           Style="{StaticResource TextMuted}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Panel.ZIndex="10"
+                                           Visibility="{Binding HasNoVolumes, Converter={StaticResource BoolToVis}}"/>
+                            </Grid>
 
                             <TextBlock Style="{StaticResource TextH3}" Margin="0,24,0,12">
                                 <Run Text="اقتراحات الإصلاح ("/>
@@ -463,6 +490,36 @@
                 </Border>
             </TabItem>
         </TabControl>
+
+        <!-- Loading overlay marker -->
+        <Grid Grid.Row="1"
+              Panel.ZIndex="999"
+              Background="#40000000"
+              Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}">
+            <Border Background="{StaticResource SurfaceBrush}"
+                    CornerRadius="12"
+                    Padding="32,24"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="24" ShadowDepth="2" Opacity="0.18" Color="#000000"/>
+                </Border.Effect>
+                <StackPanel HorizontalAlignment="Center">
+                    <ProgressBar IsIndeterminate="True"
+                                 Width="180"
+                                 Height="4"
+                                 Background="{StaticResource SurfaceAltBrush}"
+                                 Foreground="{StaticResource PrimaryBrush}"
+                                 BorderThickness="0"
+                                 Margin="0,0,0,16"/>
+                    <TextBlock Text="جاري العمل..."
+                               Style="{StaticResource TextBody}"
+                               HorizontalAlignment="Center"
+                               Foreground="{StaticResource TextSecondaryBrush}"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
 
         <!-- ═══════════════════════════════════════════ -->
         <!-- STATUS BAR                                   -->

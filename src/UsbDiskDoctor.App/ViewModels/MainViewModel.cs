@@ -44,6 +44,9 @@ namespace UsbDiskDoctor.App.ViewModels
 
         public ObservableCollection<DeviceSummary> Devices { get; }
 
+        /// <summary>True when no devices have been discovered yet.</summary>
+        public bool HasNoDevices => Devices.Count == 0;
+
         public DeviceDetailsViewModel DetailsViewModel => _detailsViewModel;
 
         /// <summary>
@@ -68,6 +71,7 @@ namespace UsbDiskDoctor.App.ViewModels
             _capacityChecker = capacityChecker ?? throw new ArgumentNullException(nameof(capacityChecker));
 
             Devices = new ObservableCollection<DeviceSummary>();
+            Devices.CollectionChanged += (_, _) => OnPropertyChanged(nameof(HasNoDevices));
             _detailsViewModel = new DeviceDetailsViewModel(null, _capacityChecker);
             _reportViewModel = new ReportViewModel();
         }
