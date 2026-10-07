@@ -1,0 +1,120 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- === App Metadata === -->
+    <sys:String x:Key="App.Title">UsbDiskDoctor — أداة فحص أقراص USB</sys:String>
+    <sys:String x:Key="App.Version">v1.3.1</sys:String>
+
+    <!-- === Header Buttons === -->
+    <sys:String x:Key="Header.Refresh">تحديث</sys:String>
+    <sys:String x:Key="Header.FullScan">فحص كامل</sys:String>
+    <sys:String x:Key="Header.About">حول</sys:String>
+    <sys:String x:Key="Header.Contact">للتواصل</sys:String>
+    <sys:String x:Key="Header.Exit">خروج</sys:String>
+    <sys:String x:Key="Header.ExitTooltip">إغلاق التطبيق</sys:String>
+    <sys:String x:Key="Header.Language">🌐 العربية</sys:String>
+    <sys:String x:Key="Header.LanguageTooltip">تبديل اللغة / Switch Language</sys:String>
+
+    <!-- === Tabs === -->
+    <sys:String x:Key="Tab.Devices">الأجهزة</sys:String>
+    <sys:String x:Key="Tab.Details">التفاصيل</sys:String>
+    <sys:String x:Key="Tab.Report">التقرير</sys:String>
+
+    <!-- === Devices Tab === -->
+    <sys:String x:Key="Devices.ColumnName">اسم الجهاز</sys:String>
+    <sys:String x:Key="Devices.ColumnId">معرف الجهاز</sys:String>
+    <sys:String x:Key="Devices.ColumnSize">الحجم (بايت)</sys:String>
+    <sys:String x:Key="Devices.ColumnStatus">الحالة</sys:String>
+    <sys:String x:Key="Devices.EmptyTitle">لا توجد أجهزة USB متصلة</sys:String>
+    <sys:String x:Key="Devices.EmptyHint">وصّل وحدة تخزين ثم اضغط «تحديث»</sys:String>
+
+    <!-- === Details Tab === -->
+    <sys:String x:Key="Details.GeneralInfo">معلومات عامة</sys:String>
+    <sys:String x:Key="Details.DeviceId">معرف الجهاز:</sys:String>
+    <sys:String x:Key="Details.Model">الموديل:</sys:String>
+    <sys:String x:Key="Details.SerialNumber">الرقم التسلسلي:</sys:String>
+    <sys:String x:Key="Details.BusType">نوع الناقل:</sys:String>
+    <sys:String x:Key="Details.MediaType">نوع الوسائط:</sys:String>
+    <sys:String x:Key="Details.PartitionStyle">نمط التقسيم:</sys:String>
+    <sys:String x:Key="Details.Size">الحجم:</sys:String>
+    <sys:String x:Key="Details.OperationalStatus">الحالة التشغيلية:</sys:String>
+    <sys:String x:Key="Details.HealthStatus">الحالة الصحية:</sys:String>
+    <sys:String x:Key="Details.Volumes">الفولومات</sys:String>
+    <sys:String x:Key="Details.Proposals">اقتراحات الإصلاح</sys:String>
+    <sys:String x:Key="Details.Execute">تنفيذ</sys:String>
+    <sys:String x:Key="Details.NoVolumes">لا توجد فولومات مكتشفة</sys:String>
+    <sys:String x:Key="Details.NoDevice">لا يوجد جهاز مختار</sys:String>
+
+    <!-- === Volumes Columns === -->
+    <sys:String x:Key="Volumes.DriveLetter">الحرف</sys:String>
+    <sys:String x:Key="Volumes.Label">الاسم</sys:String>
+    <sys:String x:Key="Volumes.FileSystem">نظام الملفات</sys:String>
+    <sys:String x:Key="Volumes.Size">الحجم (بايت)</sys:String>
+    <sys:String x:Key="Volumes.FreeSpace">متاح (بايت)</sys:String>
+    <sys:String x:Key="Volumes.Mounted">مُثبّت</sys:String>
+    <sys:String x:Key="Volumes.Raw">RAW</sys:String>
+
+    <!-- === Proposals Columns === -->
+    <sys:String x:Key="Proposals.Action">الإجراء</sys:String>
+    <sys:String x:Key="Proposals.Risk">المستوى</sys:String>
+    <sys:String x:Key="Proposals.Confirm">يحتاج تأكيد</sys:String>
+    <sys:String x:Key="Proposals.Description">الوصف</sys:String>
+
+    <!-- === Capacity Check === -->
+    <sys:String x:Key="Capacity.Title">فحص السعة الحقيقية</sys:String>
+    <sys:String x:Key="Capacity.Description">يكتب أنماط اختبار على القرص ثم يقرأها للتحقق من السعة الحقيقية. يكشف الفلاشات المزيفة التي تعلن سعة أكبر مما فيها.</sys:String>
+    <sys:String x:Key="Capacity.Mode">الوضع:</sys:String>
+    <sys:String x:Key="Capacity.ModeQuick">سريع</sys:String>
+    <sys:String x:Key="Capacity.ModeSmart">ذكي (افتراضي)</sys:String>
+    <sys:String x:Key="Capacity.ModeFull">كامل</sys:String>
+    <sys:String x:Key="Capacity.AllowWrite">السماح بالكتابة على وحدة غير فارغة</sys:String>
+    <sys:String x:Key="Capacity.Cancel">إلغاء</sys:String>
+    <sys:String x:Key="Capacity.Start">▶ بدء الفحص</sys:String>
+
+    <!-- === Report Tab === -->
+    <sys:String x:Key="Report.Empty">لا يوجد تقرير بعد. اختر جهازاً واضغط «فحص كامل».</sys:String>
+
+    <!-- === Status Bar === -->
+    <sys:String x:Key="Status.Ready">جاهز</sys:String>
+    <sys:String x:Key="Status.DevicesCount">عدد الأجهزة:</sys:String>
+
+    <!-- === Contact Window === -->
+    <sys:String x:Key="Contact.Title">للتواصل</sys:String>
+    <sys:String x:Key="Contact.Programmer">المبرمج</sys:String>
+    <sys:String x:Key="Contact.ProgrammerName">محمود العبوده</sys:String>
+    <sys:String x:Key="Contact.WhatsApp">واتساب / اتصال</sys:String>
+    <sys:String x:Key="Contact.OpenWhatsApp">فتح واتساب</sys:String>
+    <sys:String x:Key="Contact.Email">البريد الإلكتروني</sys:String>
+    <sys:String x:Key="Contact.SendEmail">إرسال بريد</sys:String>
+    <sys:String x:Key="Contact.CopyPhone">📋 نسخ رقم الهاتف</sys:String>
+    <sys:String x:Key="Contact.Close">إغلاق</sys:String>
+    <sys:String x:Key="Contact.Copied">تم نسخ رقم الهاتف إلى الحافظة.</sys:String>
+    <sys:String x:Key="Contact.MadeIn">صُنع بـ</sys:String>
+    <sys:String x:Key="Contact.MadeInCountry">في العراق</sys:String>
+
+    <!-- === About Window === -->
+    <sys:String x:Key="About.Title">حول البرنامج</sys:String>
+    <sys:String x:Key="About.Intro">أداة عراقية تعمل على Windows، تفحص وتشخّص وتُصلح وحدات التخزين الخارجية (فلاشات USB، هاردات، SD) — بدون إنترنت، بالعربية، وبواجهة حديثة.</sys:String>
+    <sys:String x:Key="About.Feature1Title">1. يكتشف ويفحص الأجهزة</sys:String>
+    <sys:String x:Key="About.Feature1Body">يكتشف أجهزتك تلقائياً ويعرض تفاصيلها الكاملة (الاسم، الحجم، الرقم التسلسلي، الحالة). ثم يقرأ بيانات S.M.A.R.T.، ويفحص نظام الملفات، ويعطيك تقييم واضح: سليم ✅ / تحذير ⚠️ / حرج 🔴.</sys:String>
+    <sys:String x:Key="About.Feature2Title">2. يكشف الفلاشات المزيفة</sys:String>
+    <sys:String x:Key="About.Feature2Body">الميزة الأقوى — كثير فلاشات تعلن 128 GB وهي فعلياً 8 GB. البرنامج يكتب أنماط اختبار على كامل السعة، يقرأها، ويكتشف أي wraparound — ثم يعطيك السعة الحقيقية بدقة.</sys:String>
+    <sys:String x:Key="About.Feature3Title">3. يستعيد الملفات ويقترح إصلاحات آمنة</sys:String>
+    <sys:String x:Key="About.Feature3Body">يسترجع ملفاتك المفقودة (صور JPEG/PNG، PDF) بتقنية File Carving — بدون الإضرار بالبيانات الأصلية. ثم يقدّم قائمة إصلاحات مصنّفة (آمن / متوسط / خطير)، وكل إجراء لازم يمر على نافذة تأكيد قبل التنفيذ.</sys:String>
+    <sys:String x:Key="About.ExtrasTitle">مميزات إضافية</sys:String>
+    <sys:String x:Key="About.Extra1">• تقارير احترافية HTML (عربي RTL) + JSON</sys:String>
+    <sys:String x:Key="About.Extra2">• قاعدة معرفة عربية (9 مقالات)</sys:String>
+    <sys:String x:Key="About.Extra3">• أمان متعدد الطبقات — لا كتابة بدون إذن صريح</sys:String>
+    <sys:String x:Key="About.Developer">تطوير: محمود العبوده</sys:String>
+    <sys:String x:Key="About.Location">بغداد — العراق</sys:String>
+
+    <!-- === Common === -->
+    <sys:String x:Key="Common.Close">إغلاق</sys:String>
+    <sys:String x:Key="Common.Cancel">إلغاء</sys:String>
+    <sys:String x:Key="Common.OK">موافق</sys:String>
+    <sys:String x:Key="Common.Yes">نعم</sys:String>
+    <sys:String x:Key="Common.No">لا</sys:String>
+    <sys:String x:Key="Common.Working">جاري العمل...</sys:String>
+
+</ResourceDictionary>

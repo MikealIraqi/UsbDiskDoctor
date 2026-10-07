@@ -1,4 +1,5 @@
 using System.Windows;
+using UsbDiskDoctor.App.Localization;
 using UsbDiskDoctor.App.ViewModels;
 using UsbDiskDoctor.Core.Logging;
 using UsbDiskDoctor.Diagnostics.DeviceDiscovery;
@@ -23,6 +24,9 @@ namespace UsbDiskDoctor.App
             base.OnStartup(e);
 
             LoggingSetup.Initialize();
+
+            // Localization: load saved language (Arabic default) before UI creation.
+            LocalizationService.Initialize();
 
             // Discovery
             var volumeReader = new WmiVolumeReader();

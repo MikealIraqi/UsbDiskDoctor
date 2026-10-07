@@ -1,0 +1,120 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- === App Metadata === -->
+    <sys:String x:Key="App.Title">UsbDiskDoctor — USB Drive Diagnostic Tool</sys:String>
+    <sys:String x:Key="App.Version">v1.3.1</sys:String>
+
+    <!-- === Header Buttons === -->
+    <sys:String x:Key="Header.Refresh">Refresh</sys:String>
+    <sys:String x:Key="Header.FullScan">Full Scan</sys:String>
+    <sys:String x:Key="Header.About">About</sys:String>
+    <sys:String x:Key="Header.Contact">Contact</sys:String>
+    <sys:String x:Key="Header.Exit">Exit</sys:String>
+    <sys:String x:Key="Header.ExitTooltip">Close application</sys:String>
+    <sys:String x:Key="Header.Language">🌐 English</sys:String>
+    <sys:String x:Key="Header.LanguageTooltip">Switch Language / تبديل اللغة</sys:String>
+
+    <!-- === Tabs === -->
+    <sys:String x:Key="Tab.Devices">Devices</sys:String>
+    <sys:String x:Key="Tab.Details">Details</sys:String>
+    <sys:String x:Key="Tab.Report">Report</sys:String>
+
+    <!-- === Devices Tab === -->
+    <sys:String x:Key="Devices.ColumnName">Device Name</sys:String>
+    <sys:String x:Key="Devices.ColumnId">Device ID</sys:String>
+    <sys:String x:Key="Devices.ColumnSize">Size (bytes)</sys:String>
+    <sys:String x:Key="Devices.ColumnStatus">Status</sys:String>
+    <sys:String x:Key="Devices.EmptyTitle">No USB devices connected</sys:String>
+    <sys:String x:Key="Devices.EmptyHint">Connect a storage device, then click "Refresh"</sys:String>
+
+    <!-- === Details Tab === -->
+    <sys:String x:Key="Details.GeneralInfo">General Information</sys:String>
+    <sys:String x:Key="Details.DeviceId">Device ID:</sys:String>
+    <sys:String x:Key="Details.Model">Model:</sys:String>
+    <sys:String x:Key="Details.SerialNumber">Serial Number:</sys:String>
+    <sys:String x:Key="Details.BusType">Bus Type:</sys:String>
+    <sys:String x:Key="Details.MediaType">Media Type:</sys:String>
+    <sys:String x:Key="Details.PartitionStyle">Partition Style:</sys:String>
+    <sys:String x:Key="Details.Size">Size:</sys:String>
+    <sys:String x:Key="Details.OperationalStatus">Operational Status:</sys:String>
+    <sys:String x:Key="Details.HealthStatus">Health Status:</sys:String>
+    <sys:String x:Key="Details.Volumes">Volumes</sys:String>
+    <sys:String x:Key="Details.Proposals">Repair Proposals</sys:String>
+    <sys:String x:Key="Details.Execute">Execute</sys:String>
+    <sys:String x:Key="Details.NoVolumes">No volumes detected</sys:String>
+    <sys:String x:Key="Details.NoDevice">No device selected</sys:String>
+
+    <!-- === Volumes Columns === -->
+    <sys:String x:Key="Volumes.DriveLetter">Letter</sys:String>
+    <sys:String x:Key="Volumes.Label">Label</sys:String>
+    <sys:String x:Key="Volumes.FileSystem">File System</sys:String>
+    <sys:String x:Key="Volumes.Size">Size (bytes)</sys:String>
+    <sys:String x:Key="Volumes.FreeSpace">Free (bytes)</sys:String>
+    <sys:String x:Key="Volumes.Mounted">Mounted</sys:String>
+    <sys:String x:Key="Volumes.Raw">RAW</sys:String>
+
+    <!-- === Proposals Columns === -->
+    <sys:String x:Key="Proposals.Action">Action</sys:String>
+    <sys:String x:Key="Proposals.Risk">Risk</sys:String>
+    <sys:String x:Key="Proposals.Confirm">Confirm</sys:String>
+    <sys:String x:Key="Proposals.Description">Description</sys:String>
+
+    <!-- === Capacity Check === -->
+    <sys:String x:Key="Capacity.Title">Real Capacity Check</sys:String>
+    <sys:String x:Key="Capacity.Description">Writes test patterns to the drive, then reads them back to verify the real capacity. Detects fake flash drives that advertise more than they actually contain.</sys:String>
+    <sys:String x:Key="Capacity.Mode">Mode:</sys:String>
+    <sys:String x:Key="Capacity.ModeQuick">Quick</sys:String>
+    <sys:String x:Key="Capacity.ModeSmart">Smart (default)</sys:String>
+    <sys:String x:Key="Capacity.ModeFull">Full</sys:String>
+    <sys:String x:Key="Capacity.AllowWrite">Allow writing on non-empty volume</sys:String>
+    <sys:String x:Key="Capacity.Cancel">Cancel</sys:String>
+    <sys:String x:Key="Capacity.Start">▶ Start Check</sys:String>
+
+    <!-- === Report Tab === -->
+    <sys:String x:Key="Report.Empty">No report yet. Select a device and click "Full Scan".</sys:String>
+
+    <!-- === Status Bar === -->
+    <sys:String x:Key="Status.Ready">Ready</sys:String>
+    <sys:String x:Key="Status.DevicesCount">Devices:</sys:String>
+
+    <!-- === Contact Window === -->
+    <sys:String x:Key="Contact.Title">Contact</sys:String>
+    <sys:String x:Key="Contact.Programmer">Developer</sys:String>
+    <sys:String x:Key="Contact.ProgrammerName">Mahmoud Al-Aboudi</sys:String>
+    <sys:String x:Key="Contact.WhatsApp">WhatsApp / Call</sys:String>
+    <sys:String x:Key="Contact.OpenWhatsApp">Open WhatsApp</sys:String>
+    <sys:String x:Key="Contact.Email">Email</sys:String>
+    <sys:String x:Key="Contact.SendEmail">Send Email</sys:String>
+    <sys:String x:Key="Contact.CopyPhone">📋 Copy Phone</sys:String>
+    <sys:String x:Key="Contact.Close">Close</sys:String>
+    <sys:String x:Key="Contact.Copied">Phone number copied to clipboard.</sys:String>
+    <sys:String x:Key="Contact.MadeIn">Made with</sys:String>
+    <sys:String x:Key="Contact.MadeInCountry">in Iraq</sys:String>
+
+    <!-- === About Window === -->
+    <sys:String x:Key="About.Title">About</sys:String>
+    <sys:String x:Key="About.Intro">An Iraqi Windows tool that diagnoses, examines and repairs external storage devices (USB flash drives, external HDDs, SD cards) — offline, in Arabic, with a modern interface.</sys:String>
+    <sys:String x:Key="About.Feature1Title">1. Detects and checks devices</sys:String>
+    <sys:String x:Key="About.Feature1Body">Automatically detects your devices and displays full details (name, size, serial number, status). Reads S.M.A.R.T. data, checks the file system, and gives you a clear verdict: Healthy ✅ / Warning ⚠️ / Critical 🔴.</sys:String>
+    <sys:String x:Key="About.Feature2Title">2. Detects fake flash drives</sys:String>
+    <sys:String x:Key="About.Feature2Body">The strongest feature — many flash drives advertise 128 GB while actually containing only 8 GB. The tool writes test patterns across the full capacity, reads them back, and detects any wraparound — then reports the real capacity accurately.</sys:String>
+    <sys:String x:Key="About.Feature3Title">3. Recovers files and suggests safe repairs</sys:String>
+    <sys:String x:Key="About.Feature3Body">Recovers your lost files (JPEG/PNG images, PDFs) using File Carving — without harming the original data. Then presents a categorized list of repair actions (Safe / Medium / Dangerous), and every action must go through a confirmation dialog before execution.</sys:String>
+    <sys:String x:Key="About.ExtrasTitle">Additional Features</sys:String>
+    <sys:String x:Key="About.Extra1">• Professional HTML (RTL Arabic) + JSON reports</sys:String>
+    <sys:String x:Key="About.Extra2">• Arabic knowledge base (9 articles)</sys:String>
+    <sys:String x:Key="About.Extra3">• Multi-layer security — no writes without explicit permission</sys:String>
+    <sys:String x:Key="About.Developer">Developer: Mahmoud Al-Aboudi</sys:String>
+    <sys:String x:Key="About.Location">Baghdad — Iraq</sys:String>
+
+    <!-- === Common === -->
+    <sys:String x:Key="Common.Close">Close</sys:String>
+    <sys:String x:Key="Common.Cancel">Cancel</sys:String>
+    <sys:String x:Key="Common.OK">OK</sys:String>
+    <sys:String x:Key="Common.Yes">Yes</sys:String>
+    <sys:String x:Key="Common.No">No</sys:String>
+    <sys:String x:Key="Common.Working">Working...</sys:String>
+
+</ResourceDictionary>
