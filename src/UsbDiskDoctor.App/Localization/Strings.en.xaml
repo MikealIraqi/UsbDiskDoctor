@@ -4,7 +4,7 @@
 
     <!-- === App Metadata === -->
     <sys:String x:Key="App.Title">UsbDiskDoctor — USB Drive Diagnostic Tool</sys:String>
-    <sys:String x:Key="App.Version">v1.3.1</sys:String>
+    <sys:String x:Key="App.Version">v1.4.0</sys:String>
 
     <!-- === Header Buttons === -->
     <sys:String x:Key="Header.Refresh">Refresh</sys:String>
@@ -13,7 +13,7 @@
     <sys:String x:Key="Header.Contact">Contact</sys:String>
     <sys:String x:Key="Header.Exit">Exit</sys:String>
     <sys:String x:Key="Header.ExitTooltip">Close application</sys:String>
-    <sys:String x:Key="Header.Language">🌐 English</sys:String>
+    <sys:String x:Key="Header.Language">🌐 Language</sys:String>
     <sys:String x:Key="Header.LanguageTooltip">Switch Language / تبديل اللغة</sys:String>
 
     <!-- === Tabs === -->
@@ -107,7 +107,7 @@
     <sys:String x:Key="About.Extra2">• Arabic knowledge base (9 articles)</sys:String>
     <sys:String x:Key="About.Extra3">• Multi-layer security — no writes without explicit permission</sys:String>
     <sys:String x:Key="About.Developer">Developer: Mahmoud Al-Aboudi</sys:String>
-    <sys:String x:Key="About.Location">Baghdad — Iraq</sys:String>
+    <sys:String x:Key="About.Location">Basra — Iraq</sys:String>
 
     <!-- === Common === -->
     <sys:String x:Key="Common.Close">Close</sys:String>
@@ -117,4 +117,16 @@
     <sys:String x:Key="Common.No">No</sys:String>
     <sys:String x:Key="Common.Working">Working...</sys:String>
 
+    <!-- === Status Messages (runtime) === -->
+    <sys:String x:Key="Status.Searching">Searching for USB devices...</sys:String>
+    <sys:String x:Key="Status.NoDevices">No USB devices connected.</sys:String>
+    <sys:String x:Key="Status.FoundDevicesFormat">Found {0} device(s).</sys:String>
+    <sys:String x:Key="Status.SearchError">Search error: {0}</sys:String>
+    <sys:String x:Key="Status.DiagnosingFull">Running full health scan...</sys:String>
+    <sys:String x:Key="Status.DiagnosisCompleteFormat">Scan complete - Status: {0} - {1} proposal(s).</sys:String>
+    <sys:String x:Key="Status.DiagnosisError">Scan error: {0}</sys:String>
+    <sys:String x:Key="Status.ExecutingFormat">Executing: {0}...</sys:String>
+    <sys:String x:Key="Status.ExecuteSucceeded">Succeeded: {0}</sys:String>
+    <sys:String x:Key="Status.ExecuteFailed">Rejected or failed: {0}</sys:String>
+    <sys:String x:Key="Status.ExecuteError">Execution error: {0}</sys:String>
 </ResourceDictionary>

@@ -2,7 +2,7 @@
 ; Build: ISCC.exe installer\UsbDiskDoctor.iss
 
 #define MyAppName "UsbDiskDoctor"
-#define MyAppVersion "1.3.1"
+#define MyAppVersion "1.4.0"
 #define MyAppPublisher "Mahmoud"
 #define MyAppExeName "UsbDiskDoctor.App.exe"
 
@@ -40,6 +40,7 @@ Source: "..\publish\*.dll"; DestDir: "{app}"; Flags: ignoreversion skipifsourced
 Source: "..\publish\*.xml"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist
 Source: "..\assets\icon-source\48.ico"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\installer\README.txt"; DestDir: "{app}"; Flags: ignoreversion isreadme
+Source: "..\installer\README_EN.txt"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\48.ico"

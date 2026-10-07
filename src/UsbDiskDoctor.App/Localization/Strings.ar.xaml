@@ -4,7 +4,7 @@
 
     <!-- === App Metadata === -->
     <sys:String x:Key="App.Title">UsbDiskDoctor — أداة فحص أقراص USB</sys:String>
-    <sys:String x:Key="App.Version">v1.3.1</sys:String>
+    <sys:String x:Key="App.Version">v1.4.0</sys:String>
 
     <!-- === Header Buttons === -->
     <sys:String x:Key="Header.Refresh">تحديث</sys:String>
@@ -13,7 +13,7 @@
     <sys:String x:Key="Header.Contact">للتواصل</sys:String>
     <sys:String x:Key="Header.Exit">خروج</sys:String>
     <sys:String x:Key="Header.ExitTooltip">إغلاق التطبيق</sys:String>
-    <sys:String x:Key="Header.Language">🌐 العربية</sys:String>
+    <sys:String x:Key="Header.Language">🌐 تغيير اللغة</sys:String>
     <sys:String x:Key="Header.LanguageTooltip">تبديل اللغة / Switch Language</sys:String>
 
     <!-- === Tabs === -->
@@ -107,7 +107,7 @@
     <sys:String x:Key="About.Extra2">• قاعدة معرفة عربية (9 مقالات)</sys:String>
     <sys:String x:Key="About.Extra3">• أمان متعدد الطبقات — لا كتابة بدون إذن صريح</sys:String>
     <sys:String x:Key="About.Developer">تطوير: محمود العبوده</sys:String>
-    <sys:String x:Key="About.Location">بغداد — العراق</sys:String>
+    <sys:String x:Key="About.Location">البصرة — العراق</sys:String>
 
     <!-- === Common === -->
     <sys:String x:Key="Common.Close">إغلاق</sys:String>
@@ -117,4 +117,16 @@
     <sys:String x:Key="Common.No">لا</sys:String>
     <sys:String x:Key="Common.Working">جاري العمل...</sys:String>
 
+    <!-- === Status Messages (runtime) === -->
+    <sys:String x:Key="Status.Searching">جاري البحث عن أجهزة USB...</sys:String>
+    <sys:String x:Key="Status.NoDevices">لا توجد أجهزة USB متصلة.</sys:String>
+    <sys:String x:Key="Status.FoundDevicesFormat">تم العثور على {0} جهاز.</sys:String>
+    <sys:String x:Key="Status.SearchError">خطأ أثناء البحث: {0}</sys:String>
+    <sys:String x:Key="Status.DiagnosingFull">جاري الفحص الصحي الشامل...</sys:String>
+    <sys:String x:Key="Status.DiagnosisCompleteFormat">اكتمل الفحص - الحالة: {0} - {1} اقتراح إصلاح.</sys:String>
+    <sys:String x:Key="Status.DiagnosisError">خطأ أثناء الفحص: {0}</sys:String>
+    <sys:String x:Key="Status.ExecutingFormat">جاري تنفيذ: {0}...</sys:String>
+    <sys:String x:Key="Status.ExecuteSucceeded">نجح التنفيذ: {0}</sys:String>
+    <sys:String x:Key="Status.ExecuteFailed">تم الرفض أو الفشل: {0}</sys:String>
+    <sys:String x:Key="Status.ExecuteError">خطأ أثناء التنفيذ: {0}</sys:String>
 </ResourceDictionary>

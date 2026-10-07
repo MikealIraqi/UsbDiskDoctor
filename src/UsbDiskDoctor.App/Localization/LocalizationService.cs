@@ -16,6 +16,7 @@ public static class LocalizationService
     private const string RegistryValueName = "Language";
     private const string ArDictRelative = "Localization/Strings.ar.xaml";
     private const string EnDictRelative = "Localization/Strings.en.xaml";
+    private static ResourceDictionary? _currentStringsDict;
 
     /// <summary>Raised after the language dictionary has been swapped.</summary>
     public static event Action? LanguageChanged;
@@ -87,11 +88,16 @@ public static class LocalizationService
 
         var dicts = Application.Current.Resources.MergedDictionaries;
 
-        // Remove any previous Strings dictionary
+        if (_currentStringsDict is not null)
+        {
+            dicts.Remove(_currentStringsDict);
+            _currentStringsDict = null;
+        }
+
         for (int i = dicts.Count - 1; i >= 0; i--)
         {
             var src = dicts[i].Source?.OriginalString ?? string.Empty;
-            if (src.Contains("Strings.ar.xaml") || src.Contains("Strings.en.xaml"))
+            if (src.IndexOf("Strings.", StringComparison.OrdinalIgnoreCase) >= 0)
             {
                 dicts.RemoveAt(i);
             }
@@ -103,6 +109,7 @@ public static class LocalizationService
             Source = new Uri(relative, UriKind.Relative)
         };
         dicts.Add(newDict);
+        _currentStringsDict = newDict;
 
         CurrentLanguage = lang;
         CultureInfo.CurrentUICulture = new CultureInfo(lang);
