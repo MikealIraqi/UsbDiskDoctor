@@ -6,7 +6,7 @@
         xmlns:recModels="clr-namespace:UsbDiskDoctor.Recovery.Models;assembly=UsbDiskDoctor.Recovery"
         xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         mc:Ignorable="d"
-        Title="UsbDiskDoctor — أداة فحص أقراص USB"
+        Title="{DynamicResource App.Title}"
         Icon="/Assets/app.ico"
         Width="1100"
         Height="720"
@@ -31,7 +31,7 @@
                 BorderBrush="{StaticResource BorderBrush}"
                 BorderThickness="0,0,0,1"
                 Padding="20,14">
-            <Grid FlowDirection="RightToLeft">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -65,24 +65,29 @@
                 <!-- Action buttons -->
                 <StackPanel Grid.Column="2" Orientation="Horizontal">
                                         <Button AutomationProperties.Name="فتح نافذة للتواصل"
-                                                Content="للتواصل"
+                                                Content="{DynamicResource Header.Contact}"
                                                 Style="{StaticResource GhostButton}"
                                                 Margin="0,0,8,0"
                                                 Click="OnContactClicked"
-                                                ToolTip="معلومات التواصل"/>
-                                        <Button Content="حول" Style="{StaticResource GhostButton}" Margin="0,0,8,0" Click="OnAboutClicked" ToolTip="حول البرنامج"/>
-                    <Button Content="خروج"
+                                                ToolTip="{DynamicResource Header.Contact}"/>
+                                        <Button Content="{DynamicResource Header.About}" Style="{StaticResource GhostButton}" Margin="0,0,8,0" Click="OnAboutClicked" ToolTip="{DynamicResource About.Title}"/>
+                                        <Button Content="{DynamicResource Header.Language}"
+                            Style="{StaticResource GhostButton}"
+                            Margin="0,0,8,0"
+                            Click="OnLanguageToggleClicked"
+                            ToolTip="{DynamicResource Header.LanguageTooltip}"/>
+                    <Button Content="{DynamicResource Header.Exit}"
                             Style="{StaticResource GhostButton}"
                             Margin="0,0,8,0"
                             Click="OnExitClicked"
-                            ToolTip="إغلاق التطبيق"/>
+                            ToolTip="{DynamicResource Header.ExitTooltip}"/>
                     <Button AutomationProperties.Name="تشغيل الفحص الكامل للجهاز المحدد"
-                            Content="فحص كامل"
+                            Content="{DynamicResource Header.FullScan}"
                             Style="{StaticResource SecondaryButton}"
                             Command="{Binding RunFullDiagnosticCommand}"
                             Margin="0,0,8,0"/>
                     <Button AutomationProperties.Name="تحديث قائمة الأجهزة"
-                            Content="تحديث"
+                            Content="{DynamicResource Header.Refresh}"
                             Style="{StaticResource PrimaryButton}"
                             Command="{Binding RefreshCommand}"/>
                 </StackPanel>
@@ -142,7 +147,7 @@
             </TabControl.Resources>
 
             <!-- ═════════ TAB 1: الأجهزة ═════════ -->
-            <TabItem Header="الأجهزة">
+            <TabItem Header="{DynamicResource Tab.Devices}">
                 <Border Background="{StaticResource SurfaceBrush}"
                         BorderBrush="{StaticResource BorderBrush}"
                         BorderThickness="1"
@@ -190,10 +195,10 @@
                         </ListView.ItemContainerStyle>
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="اسم الجهاز" DisplayMemberBinding="{Binding FriendlyName}" Width="260"/>
-                                <GridViewColumn Header="معرف الجهاز" DisplayMemberBinding="{Binding DeviceId}" Width="200"/>
-                                <GridViewColumn Header="الحجم (بايت)" DisplayMemberBinding="{Binding SizeBytes}" Width="160"/>
-                                <GridViewColumn Header="الحالة" DisplayMemberBinding="{Binding OperationalStatus}" Width="140"/>
+                                <GridViewColumn Header="{DynamicResource Devices.ColumnName}" DisplayMemberBinding="{Binding FriendlyName}" Width="260"/>
+                                <GridViewColumn Header="{DynamicResource Devices.ColumnId}" DisplayMemberBinding="{Binding DeviceId}" Width="200"/>
+                                <GridViewColumn Header="{DynamicResource Devices.ColumnSize}" DisplayMemberBinding="{Binding SizeBytes}" Width="160"/>
+                                <GridViewColumn Header="{DynamicResource Devices.ColumnStatus}" DisplayMemberBinding="{Binding OperationalStatus}" Width="140"/>
                             </GridView>
                         </ListView.View>
                     </ListView>
@@ -202,12 +207,12 @@
                                     VerticalAlignment="Center"
                                     Visibility="{Binding HasNoDevices, Converter={StaticResource BoolToVis}}">
                             <TextBlock Text="🔌" FontSize="48" HorizontalAlignment="Center" Opacity="0.35"/>
-                            <TextBlock Text="لا توجد أجهزة USB متصلة"
+                            <TextBlock Text="{DynamicResource Devices.EmptyTitle}"
                                        Style="{StaticResource TextH3}"
                                        Foreground="{StaticResource TextSecondaryBrush}"
                                        HorizontalAlignment="Center"
                                        Margin="0,12,0,4"/>
-                            <TextBlock Text="وصّل وحدة تخزين ثم اضغط «تحديث»"
+                            <TextBlock Text="{DynamicResource Devices.EmptyHint}"
                                        Style="{StaticResource TextSecondary}"
                                        Foreground="{StaticResource TextMutedBrush}"
                                        HorizontalAlignment="Center"/>
@@ -217,7 +222,7 @@
             </TabItem>
 
             <!-- ═════════ TAB 2: التفاصيل ═════════ -->
-            <TabItem Header="التفاصيل">
+            <TabItem Header="{DynamicResource Tab.Details}">
                 <Border Background="{StaticResource SurfaceBrush}"
                         BorderBrush="{StaticResource BorderBrush}"
                         BorderThickness="1"
@@ -231,7 +236,7 @@
                                        Style="{StaticResource TextH1}"
                                        Margin="0,0,0,20"/>
 
-                            <TextBlock Text="معلومات عامة"
+                            <TextBlock Text="{DynamicResource Details.GeneralInfo}"
                                        Style="{StaticResource TextH3}"
                                        Margin="0,0,0,12"/>
 
@@ -252,36 +257,36 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
-                                <TextBlock Grid.Row="0" Grid.Column="0" Text="معرف الجهاز:" Style="{StaticResource TextLabel}" Margin="0,4"/>
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="{DynamicResource Details.DeviceId}" Style="{StaticResource TextLabel}" Margin="0,4"/>
                                 <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding DeviceIdText}" Style="{StaticResource TextBody}" Margin="0,4"/>
 
-                                <TextBlock Grid.Row="1" Grid.Column="0" Text="الموديل:" Style="{StaticResource TextLabel}" Margin="0,4"/>
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="{DynamicResource Details.Model}" Style="{StaticResource TextLabel}" Margin="0,4"/>
                                 <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ModelText}" Style="{StaticResource TextBody}" Margin="0,4"/>
 
-                                <TextBlock Grid.Row="2" Grid.Column="0" Text="الرقم التسلسلي:" Style="{StaticResource TextLabel}" Margin="0,4"/>
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="{DynamicResource Details.SerialNumber}" Style="{StaticResource TextLabel}" Margin="0,4"/>
                                 <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SerialNumberText}" Style="{StaticResource TextBody}" Margin="0,4"/>
 
-                                <TextBlock Grid.Row="3" Grid.Column="0" Text="نوع الناقل:" Style="{StaticResource TextLabel}" Margin="0,4"/>
+                                <TextBlock Grid.Row="3" Grid.Column="0" Text="{DynamicResource Details.BusType}" Style="{StaticResource TextLabel}" Margin="0,4"/>
                                 <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding BusTypeText}" Style="{StaticResource TextBody}" Margin="0,4"/>
 
-                                <TextBlock Grid.Row="4" Grid.Column="0" Text="نوع الوسائط:" Style="{StaticResource TextLabel}" Margin="0,4"/>
+                                <TextBlock Grid.Row="4" Grid.Column="0" Text="{DynamicResource Details.MediaType}" Style="{StaticResource TextLabel}" Margin="0,4"/>
                                 <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding MediaTypeText}" Style="{StaticResource TextBody}" Margin="0,4"/>
 
-                                <TextBlock Grid.Row="5" Grid.Column="0" Text="نمط التقسيم:" Style="{StaticResource TextLabel}" Margin="0,4"/>
+                                <TextBlock Grid.Row="5" Grid.Column="0" Text="{DynamicResource Details.PartitionStyle}" Style="{StaticResource TextLabel}" Margin="0,4"/>
                                 <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding PartitionStyleText}" Style="{StaticResource TextBody}" Margin="0,4"/>
 
-                                <TextBlock Grid.Row="6" Grid.Column="0" Text="الحجم:" Style="{StaticResource TextLabel}" Margin="0,4"/>
+                                <TextBlock Grid.Row="6" Grid.Column="0" Text="{DynamicResource Details.Size}" Style="{StaticResource TextLabel}" Margin="0,4"/>
                                 <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding SizeText}" Style="{StaticResource TextBody}" Margin="0,4"/>
 
-                                <TextBlock Grid.Row="7" Grid.Column="0" Text="الحالة التشغيلية:" Style="{StaticResource TextLabel}" Margin="0,4"/>
+                                <TextBlock Grid.Row="7" Grid.Column="0" Text="{DynamicResource Details.OperationalStatus}" Style="{StaticResource TextLabel}" Margin="0,4"/>
                                 <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding OperationalStatusText}" Style="{StaticResource TextBody}" Margin="0,4"/>
 
-                                <TextBlock Grid.Row="8" Grid.Column="0" Text="الحالة الصحية:" Style="{StaticResource TextLabel}" Margin="0,4"/>
+                                <TextBlock Grid.Row="8" Grid.Column="0" Text="{DynamicResource Details.HealthStatus}" Style="{StaticResource TextLabel}" Margin="0,4"/>
                                 <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding HealthStatusText}" Style="{StaticResource TextBody}" Margin="0,4"/>
                             </Grid>
 
                             <TextBlock Style="{StaticResource TextH3}" Margin="0,10,0,12">
-                                <Run Text="الفوليومات ("/>
+                                <Run Text="{DynamicResource Details.Volumes}"/><Run Text=" ("/>
                                 <Run Text="{Binding VolumesCountText, Mode=OneWay}"/>
                                 <Run Text=")"/>
                             </TextBlock>
@@ -294,17 +299,17 @@
                                       Background="Transparent">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="الحرف" DisplayMemberBinding="{Binding DriveLetter}" Width="60"/>
-                                        <GridViewColumn Header="الاسم" DisplayMemberBinding="{Binding Label}" Width="150"/>
-                                        <GridViewColumn Header="نظام الملفات" DisplayMemberBinding="{Binding FileSystem}" Width="120"/>
-                                        <GridViewColumn Header="الحجم (بايت)" DisplayMemberBinding="{Binding SizeBytes}" Width="130"/>
-                                        <GridViewColumn Header="متاح (بايت)" DisplayMemberBinding="{Binding FreeSpaceBytes}" Width="130"/>
-                                        <GridViewColumn Header="مُثبّت" DisplayMemberBinding="{Binding IsMounted}" Width="80"/>
-                                        <GridViewColumn Header="RAW" DisplayMemberBinding="{Binding IsRaw}" Width="70"/>
+                                        <GridViewColumn Header="{DynamicResource Volumes.DriveLetter}" DisplayMemberBinding="{Binding DriveLetter}" Width="60"/>
+                                        <GridViewColumn Header="{DynamicResource Volumes.Label}" DisplayMemberBinding="{Binding Label}" Width="150"/>
+                                        <GridViewColumn Header="{DynamicResource Volumes.FileSystem}" DisplayMemberBinding="{Binding FileSystem}" Width="120"/>
+                                        <GridViewColumn Header="{DynamicResource Devices.ColumnSize}" DisplayMemberBinding="{Binding SizeBytes}" Width="130"/>
+                                        <GridViewColumn Header="{DynamicResource Volumes.FreeSpace}" DisplayMemberBinding="{Binding FreeSpaceBytes}" Width="130"/>
+                                        <GridViewColumn Header="{DynamicResource Volumes.Mounted}" DisplayMemberBinding="{Binding IsMounted}" Width="80"/>
+                                        <GridViewColumn Header="{DynamicResource Volumes.Raw}" DisplayMemberBinding="{Binding IsRaw}" Width="70"/>
                                     </GridView>
                                 </ListView.View>
                             </ListView>
-                                <TextBlock Text="لا توجد فولومات مكتشفة"
+                                <TextBlock Text="{DynamicResource Details.NoVolumes}"
                                            Style="{StaticResource TextMuted}"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
@@ -313,7 +318,7 @@
                             </Grid>
 
                             <TextBlock Style="{StaticResource TextH3}" Margin="0,24,0,12">
-                                <Run Text="اقتراحات الإصلاح ("/>
+                                <Run Text="{DynamicResource Details.Proposals}"/><Run Text=" ("/>
                                 <Run Text="{Binding ProposalsCount, Mode=OneWay}"/>
                                 <Run Text=")"/>
                             </TextBlock>
@@ -324,14 +329,14 @@
                                       Background="Transparent">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="الإجراء" DisplayMemberBinding="{Binding ActionCode}" Width="240"/>
-                                        <GridViewColumn Header="المستوى" DisplayMemberBinding="{Binding RiskLevel}" Width="100"/>
-                                        <GridViewColumn Header="يحتاج تأكيد" DisplayMemberBinding="{Binding RequiresConfirmation}" Width="100"/>
-                                        <GridViewColumn Header="الوصف" DisplayMemberBinding="{Binding DescriptionAr}" Width="300"/>
+                                        <GridViewColumn Header="{DynamicResource Proposals.Action}" DisplayMemberBinding="{Binding ActionCode}" Width="240"/>
+                                        <GridViewColumn Header="{DynamicResource Proposals.Risk}" DisplayMemberBinding="{Binding RiskLevel}" Width="100"/>
+                                        <GridViewColumn Header="{DynamicResource Proposals.Confirm}" DisplayMemberBinding="{Binding RequiresConfirmation}" Width="100"/>
+                                        <GridViewColumn Header="{DynamicResource Proposals.Description}" DisplayMemberBinding="{Binding DescriptionAr}" Width="300"/>
                                         <GridViewColumn Header="" Width="100">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <Button Content="تنفيذ"
+                                                    <Button Content="{DynamicResource Details.Execute}"
                                                             Style="{StaticResource PrimaryButton}"
                                                             Padding="12,4"
                                                             Command="{Binding DataContext.RequestExecuteProposalCommand, RelativeSource={RelativeSource AncestorType=Window}}"
@@ -354,9 +359,9 @@
                                 <!-- Header -->
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
                                     <TextBlock Text="🔍" FontSize="18" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                                    <TextBlock Text="فحص السعة الحقيقية" Style="{StaticResource TextH3}"/>
+                                    <TextBlock Text="{DynamicResource Capacity.Title}" Style="{StaticResource TextH3}"/>
                                 </StackPanel>
-                                <TextBlock Text="يكتب أنماط اختبار على القرص ثم يقرأها للتحقق من السعة الحقيقية. يكشف الفلاشات المزيفة التي تعلن سعة أكبر مما فيها."
+                                <TextBlock Text="{DynamicResource Capacity.Description}"
                                            Style="{StaticResource TextSecondary}"
                                            TextWrapping="Wrap"
                                            Margin="0,0,0,16"/>
@@ -370,7 +375,7 @@
                                     </Grid.ColumnDefinitions>
 
                                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                                        <TextBlock Text="الوضع:" Style="{StaticResource TextLabel}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                        <TextBlock Text="{DynamicResource Capacity.Mode}" Style="{StaticResource TextLabel}" VerticalAlignment="Center" Margin="0,0,8,0"/>
                                         <ComboBox AutomationProperties.Name="وضع فحص السعة الحقيقية"
                                                   SelectedValue="{Binding SelectedMode, Mode=TwoWay}"
                                                   SelectedValuePath="Tag"
@@ -378,14 +383,14 @@
                                                   FontFamily="{StaticResource PrimaryFontFamily}"
                                                   FontSize="13"
                                                   Padding="10,6">
-                                            <ComboBoxItem Content="سريع" Tag="{x:Static recModels:CapacityCheckMode.Quick}"/>
-                                            <ComboBoxItem Content="ذكي (افتراضي)" Tag="{x:Static recModels:CapacityCheckMode.Smart}"/>
-                                            <ComboBoxItem Content="كامل" Tag="{x:Static recModels:CapacityCheckMode.Full}"/>
+                                            <ComboBoxItem Content="{DynamicResource Capacity.ModeQuick}" Tag="{x:Static recModels:CapacityCheckMode.Quick}"/>
+                                            <ComboBoxItem Content="{DynamicResource Capacity.ModeSmart}" Tag="{x:Static recModels:CapacityCheckMode.Smart}"/>
+                                            <ComboBoxItem Content="{DynamicResource Capacity.ModeFull}" Tag="{x:Static recModels:CapacityCheckMode.Full}"/>
                                         </ComboBox>
                                     </StackPanel>
 
                                     <CheckBox Grid.Column="1"
-                                              Content="السماح بالكتابة على وحدة غير فارغة"
+                                              Content="{DynamicResource Capacity.AllowWrite}"
                                               IsChecked="{Binding AllowWriteOnNonEmpty, Mode=TwoWay}"
                                               Foreground="{StaticResource TextSecondaryBrush}"
                                               FontFamily="{StaticResource PrimaryFontFamily}"
@@ -396,13 +401,13 @@
 
                                     <StackPanel Grid.Column="2" Orientation="Horizontal">
                                         <Button AutomationProperties.Name="إلغاء فحص السعة الجاري"
-                                                Content="إلغاء"
+                                                Content="{DynamicResource Capacity.Cancel}"
                                                 Style="{StaticResource SecondaryButton}"
                                                 Command="{Binding CancelCheckCommand}"
                                                 Padding="14,8"
                                                 Margin="0,0,8,0"/>
                                         <Button AutomationProperties.Name="بدء فحص السعة الحقيقية للقرص"
-                                                Content="▶ بدء الفحص"
+                                                Content="{DynamicResource Capacity.Start}"
                                                 Style="{StaticResource PrimaryButton}"
                                                 Command="{Binding StartCheckCommand}"
                                                 Padding="14,8"/>
@@ -479,7 +484,7 @@
             </TabItem>
 
             <!-- ═════════ TAB 3: التقرير ═════════ -->
-            <TabItem Header="التقرير">
+            <TabItem Header="{DynamicResource Tab.Report}">
                 <Border Background="{StaticResource SurfaceBrush}"
                         BorderBrush="{StaticResource BorderBrush}"
                         BorderThickness="1"
@@ -488,7 +493,7 @@
                         Padding="1">
                     <Grid>
                         <wv2:WebView2 x:Name="ReportWebView"/>
-                        <TextBlock Text="لا يوجد تقرير بعد. اختر جهازاً واضغط «فحص كامل»."
+                        <TextBlock Text="{DynamicResource Report.Empty}"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    FontSize="16"
@@ -520,7 +525,7 @@
                                  Foreground="{StaticResource PrimaryBrush}"
                                  BorderThickness="0"
                                  Margin="0,0,0,16"/>
-                    <TextBlock Text="جاري العمل..."
+                    <TextBlock Text="{DynamicResource Common.Working}"
                                Style="{StaticResource TextBody}"
                                HorizontalAlignment="Center"
                                Foreground="{StaticResource TextSecondaryBrush}"/>
@@ -537,7 +542,7 @@
                 BorderBrush="{StaticResource BorderBrush}"
                 BorderThickness="0,1,0,0"
                 Padding="20,8">
-            <Grid FlowDirection="RightToLeft">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -560,7 +565,7 @@
                            HorizontalAlignment="Center"
                            Style="{StaticResource TextSecondary}"
                            VerticalAlignment="Center">
-                    <Run Text="عدد الأجهزة: "/>
+                    <Run Text="{DynamicResource Status.DevicesCount}"/>
                     <Run Text="{Binding Devices.Count, Mode=OneWay}" FontWeight="SemiBold"/>
                 </TextBlock>
 
