@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using UsbDiskDoctor.App.Localization;
 using UsbDiskDoctor.Core.Models;
 using UsbDiskDoctor.Recovery.CapacityChecking;
 
@@ -21,11 +22,14 @@ namespace UsbDiskDoctor.App.ViewModels
         {
             _device = device;
             _capacityChecker = capacityChecker ?? throw new ArgumentNullException(nameof(capacityChecker));
+
+            // Refresh all bound strings when language changes.
+            LocalizationService.LanguageChanged += OnLanguageChangedRefresh;
         }
 
         public bool HasDevice => Device != null;
 
-        public string FriendlyName => Device?.FriendlyName ?? "لا يوجد جهاز مختار";
+        public string FriendlyName => Device?.FriendlyName ?? LocalizationService.Get("Details.NoDevice");
 
         public string DeviceIdText => Device?.DeviceId ?? "-";
 
@@ -170,5 +174,10 @@ namespace UsbDiskDoctor.App.ViewModels
 
             return $"{bytes / (1024.0 * 1024 * 1024 * 1024):F2} TB";
         }
-    }
+    
+        private void OnLanguageChangedRefresh()
+        {
+            // string.Empty -> WPF re-evaluates every binding on this VM.
+            OnPropertyChanged(string.Empty);
+        }}
 }

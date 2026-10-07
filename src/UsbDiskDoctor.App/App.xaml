@@ -10,7 +10,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>
-                            <Rectangle Stroke="{StaticResource PrimaryBrush}"
+                            <Rectangle Stroke="{DynamicResource PrimaryBrush}"
                                        StrokeThickness="2"
                                        StrokeDashArray="3 2"
                                        RadiusX="8"

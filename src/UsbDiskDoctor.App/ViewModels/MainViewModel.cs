@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using UsbDiskDoctor.App.Localization;
 using UsbDiskDoctor.Core.Models;
 using UsbDiskDoctor.Diagnostics.DeviceDiscovery;
 using UsbDiskDoctor.Diagnostics.DiagnosticEngine;
@@ -29,6 +30,8 @@ namespace UsbDiskDoctor.App.ViewModels
         private readonly IRepairExecutor _repairExecutor;
         private readonly IFakeCapacityChecker _capacityChecker;
         private readonly DeviceDetailsViewModel _detailsViewModel;
+        private string? _lastStatusKey;
+        private object[] _lastStatusArgs = System.Array.Empty<object>();
 
         [ObservableProperty]
         private DeviceSummary? _selectedDevice;
@@ -74,6 +77,8 @@ namespace UsbDiskDoctor.App.ViewModels
             Devices.CollectionChanged += (_, _) => OnPropertyChanged(nameof(HasNoDevices));
             _detailsViewModel = new DeviceDetailsViewModel(null, _capacityChecker);
             _reportViewModel = new ReportViewModel();
+
+            LocalizationService.LanguageChanged += ReapplyLastStatus;
         }
 
         partial void OnSelectedDeviceChanged(DeviceSummary? value)
@@ -94,7 +99,7 @@ namespace UsbDiskDoctor.App.ViewModels
         {
             if (IsBusy) return;
             IsBusy = true;
-            StatusMessage = "جاري البحث عن أجهزة USB...";
+            SetStatus("Status.Searching");
             try
             {
                 var options = new DiscoveryOptions();
@@ -106,13 +111,12 @@ namespace UsbDiskDoctor.App.ViewModels
                     Devices.Add(d);
                 }
 
-                StatusMessage = devices.Count == 0
-                    ? "لا توجد أجهزة USB متصلة."
-                    : "تم العثور على " + devices.Count + " جهاز.";
+                if (devices.Count == 0) { SetStatus("Status.NoDevices"); }
+                else { SetStatus("Status.FoundDevicesFormat", devices.Count); }
             }
             catch (Exception ex)
             {
-                StatusMessage = "خطأ أثناء البحث: " + ex.Message;
+                SetStatus("Status.SearchError", ex.Message);
             }
             finally
             {
@@ -132,7 +136,7 @@ namespace UsbDiskDoctor.App.ViewModels
             }
 
             IsBusy = true;
-            StatusMessage = "جاري الفحص الصحي الشامل...";
+            SetStatus("Status.DiagnosingFull");
             try
             {
                 var diagnosticReport = await _diagnosticEngine.DiagnoseAsync(deviceForDiagnostic);
@@ -143,11 +147,11 @@ namespace UsbDiskDoctor.App.ViewModels
                 var htmlOutput = _htmlReportGenerator.Generate(new[] { diagnosticReport });
                 ReportViewModel.SetContent(htmlOutput);
 
-                StatusMessage = "اكتمل الفحص - الحالة: " + diagnosticReport.HealthEvaluation.OverallStatus + " - " + proposals.Count + " اقتراح إصلاح.";
+                SetStatus("Status.DiagnosisCompleteFormat", diagnosticReport.HealthEvaluation.OverallStatus, proposals.Count);
             }
             catch (Exception diagnosticException)
             {
-                StatusMessage = "خطأ أثناء الفحص: " + diagnosticException.Message;
+                SetStatus("Status.DiagnosisError", diagnosticException.Message);
             }
             finally
             {
@@ -181,7 +185,7 @@ namespace UsbDiskDoctor.App.ViewModels
             if (proposal == null) return;
 
             IsBusy = true;
-            StatusMessage = "جاري تنفيذ: " + proposal.ActionCode + "...";
+            SetStatus("Status.ExecutingFormat", proposal.ActionCode);
             try
             {
                 var execResult = await _repairExecutor.ExecuteAsync(
@@ -189,18 +193,36 @@ namespace UsbDiskDoctor.App.ViewModels
                     confirmationToken,
                     targetDriveLetter);
 
-                StatusMessage = execResult.Succeeded
-                    ? "نجح التنفيذ: " + execResult.MessageAr
-                    : "تم الرفض أو الفشل: " + execResult.MessageAr;
+                SetStatus(execResult.Succeeded
+                    ? "Status.ExecuteSucceeded"
+                    : "Status.ExecuteFailed", execResult.MessageAr);
             }
             catch (Exception execException)
             {
-                StatusMessage = "خطأ أثناء التنفيذ: " + execException.Message;
+                SetStatus("Status.ExecuteError", execException.Message);
             }
             finally
             {
                 IsBusy = false;
             }
         }
-    }
+    
+
+        private void SetStatus(string key, params object[] args)
+        {
+            _lastStatusKey = key;
+            _lastStatusArgs = args;
+            StatusMessage = args.Length == 0
+                ? LocalizationService.Get(key)
+                : string.Format(LocalizationService.Get(key), args);
+        }
+
+        private void ReapplyLastStatus()
+        {
+            if (_lastStatusKey is null) return;
+            StatusMessage = _lastStatusArgs.Length == 0
+                ? LocalizationService.Get(_lastStatusKey)
+                : string.Format(LocalizationService.Get(_lastStatusKey), _lastStatusArgs);
+        }
+}
 }

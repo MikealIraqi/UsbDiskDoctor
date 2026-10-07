@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using UsbDiskDoctor.App.Localization;
 using UsbDiskDoctor.App.ViewModels;
 using UsbDiskDoctor.App.Views;
 using UsbDiskDoctor.Core.Models;
@@ -18,6 +19,8 @@ namespace UsbDiskDoctor.App
         public MainWindow(MainViewModel viewModel)
         {
             InitializeComponent();
+            LocalizationService.LanguageChanged += OnLanguageChanged;
+            OnLanguageChanged(); // Apply FlowDirection on startup
 
             _viewModel = viewModel ?? throw new System.ArgumentNullException(nameof(viewModel));
             DataContext = _viewModel;
@@ -109,5 +112,16 @@ namespace UsbDiskDoctor.App
         {
             Close();
         }
+
+
+    private void OnLanguageToggleClicked(object sender, RoutedEventArgs e)
+    {
+        LocalizationService.ToggleLanguage();
     }
+
+    private void OnLanguageChanged()
+    {
+        this.FlowDirection = LocalizationService.CurrentFlowDirection;
+    }
+}
 }

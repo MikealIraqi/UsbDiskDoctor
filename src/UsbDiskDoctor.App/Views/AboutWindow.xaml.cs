@@ -1,4 +1,5 @@
 using System.Windows;
+using UsbDiskDoctor.App.Localization;
 
 namespace UsbDiskDoctor.App.Views;
 
@@ -10,6 +11,7 @@ public partial class AboutWindow : Window
     public AboutWindow()
     {
         InitializeComponent();
+        this.FlowDirection = LocalizationService.CurrentFlowDirection;
     }
 
     private void OnCloseClicked(object sender, RoutedEventArgs e)
