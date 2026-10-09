@@ -48,3 +48,6 @@ publish-installer/
 # Executables
 *.exe
 !installer/*.iss
+
+# WebView2 runtime cache
+*.WebView2/
