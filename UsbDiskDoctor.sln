@@ -27,8 +27,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsbDiskDoctor.Diagnostics.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsbDiskDoctor.App.Tests", "tests\UsbDiskDoctor.App.Tests\UsbDiskDoctor.App.Tests.csproj", "{D2716872-4ECF-457C-ADCD-0CB693976358}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsbDiskDoctor.Recovery.Tests", "tests\UsbDiskDoctor.Recovery.Tests\UsbDiskDoctor.Recovery.Tests.csproj", "{2BBEB356-7CD7-482F-AFC3-43EA8C937320}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,10 +76,6 @@ Global
 		{D2716872-4ECF-457C-ADCD-0CB693976358}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2716872-4ECF-457C-ADCD-0CB693976358}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2716872-4ECF-457C-ADCD-0CB693976358}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2BBEB356-7CD7-482F-AFC3-43EA8C937320}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2BBEB356-7CD7-482F-AFC3-43EA8C937320}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2BBEB356-7CD7-482F-AFC3-43EA8C937320}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2BBEB356-7CD7-482F-AFC3-43EA8C937320}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B0904432-5712-4CCE-AAA1-D928B3C237C8} = {E980A167-E377-48DC-80E8-4D22971840B2}
@@ -94,6 +88,5 @@ Global
 		{CB31C98A-7E0A-43F9-9714-50FB8E1BC138} = {1F77FC7A-7568-4510-AEC2-167943DECCB4}
 		{C6837EAB-5535-4B5A-BC84-A517D0B2455F} = {1F77FC7A-7568-4510-AEC2-167943DECCB4}
 		{D2716872-4ECF-457C-ADCD-0CB693976358} = {1F77FC7A-7568-4510-AEC2-167943DECCB4}
-		{2BBEB356-7CD7-482F-AFC3-43EA8C937320} = {1F77FC7A-7568-4510-AEC2-167943DECCB4}
 	EndGlobalSection
 EndGlobal

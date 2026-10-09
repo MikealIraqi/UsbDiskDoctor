@@ -16,9 +16,9 @@ namespace UsbDiskDoctor.Core.Tests.Knowledge
 
             var count = sut.Load();
 
-            Assert.Equal(9, count);
+            Assert.Equal(10, count);
             Assert.True(sut.IsLoaded);
-            Assert.Equal(9, sut.ArticleCount);
+            Assert.Equal(10, sut.ArticleCount);
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace UsbDiskDoctor.Core.Tests.Knowledge
             var secondCall = sut.Load();
 
             Assert.Equal(firstCall, secondCall);
-            Assert.Equal(9, secondCall);
+            Assert.Equal(10, secondCall);
         }
 
         [Fact]
@@ -89,7 +89,7 @@ namespace UsbDiskDoctor.Core.Tests.Knowledge
 
             var allArticles = sut.GetAllArticles();
 
-            Assert.Equal(9, allArticles.Count);
+            Assert.Equal(10, allArticles.Count);
         }
 
         [Fact]
