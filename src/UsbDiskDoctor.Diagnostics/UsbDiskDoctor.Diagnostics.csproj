@@ -18,4 +18,8 @@
     <InternalsVisibleTo Include="UsbDiskDoctor.Diagnostics.Tests" />
   </ItemGroup>
 
+<ItemGroup>
+    <ProjectReference Include="..\UsbDiskDoctor.Recovery\UsbDiskDoctor.Recovery.csproj" />
+  </ItemGroup>
+
 </Project>
