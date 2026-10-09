@@ -21,4 +21,8 @@
     <ProjectReference Include="..\..\src\UsbDiskDoctor.Recovery\UsbDiskDoctor.Recovery.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\UsbDiskDoctor.Knowledge\UsbDiskDoctor.Knowledge.csproj" />
+    <ProjectReference Include="..\..\src\UsbDiskDoctor.Core\UsbDiskDoctor.Core.csproj" />
+  </ItemGroup>
 </Project>

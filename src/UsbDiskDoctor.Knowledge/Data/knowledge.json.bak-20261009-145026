@@ -208,30 +208,5 @@
       "H2testw capacity test",
       "USB drive counterfeit capacity"
     ]
-  },
-    {
-        "code": "FAKE_CAPACITY_DETECTED",
-        "titleAr": "قرص مزيف السعة",
-        "titleEn": "Fake Capacity Detected",
-        "causeAr": "القرص يُعلن سعة أكبر من السعة الفيزيائية الحقيقية. بعد نقطة معينة، البيانات الجديدة تُكتب فوق بيانات قديمة (wrap-around) بدل التخزين الفعلي، فتضيع الملفات القديمة وتظهر الملفات الجديدة على أنها سليمة.",
-        "causeEn": "The drive reports more capacity than physically exists. Beyond a certain point, new data overwrites old data (wrap-around) instead of being stored, so old files are lost while new ones appear healthy.",
-        "safeActions": [
-            "لا تخزّن أي بيانات مهمة على هذا القرص.",
-            "اطلب إعادة المنتج أو استرداد المبلغ من البائع (هذا غش تجاري).",
-            "استخدم أداة مستقلة مثل H2testw للتحقق.",
-            "إن احتجته مؤقتاً، استخدمه للتخزين المؤقت فقط ضمن السعة الحقيقية المكتشفة."
-        ],
-        "dangerousActions": [
-            "الفورمات أو إعادة التهيئة (لن تحل المشكلة — السعة المزيفة تبقى).",
-            "تخزين نسخ احتياطية عليه.",
-            "الاعتماد عليه كقرص أساسي أو للعمل المهم."
-        ],
-        "requiresConfirmation": false,
-        "externalSearchKeywords": [
-            "fake USB flash drive capacity",
-            "H2testw tutorial",
-            "counterfeit flash drive test",
-            "USB drive wrap-around memory"
-        ]
-    }
+  }
 ]
