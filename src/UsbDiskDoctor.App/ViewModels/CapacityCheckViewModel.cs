@@ -1,4 +1,3 @@
-// File: src/UsbDiskDoctor.App/ViewModels/CapacityCheckViewModel.cs
 using System;
 using System.IO;
 using System.Threading;
@@ -168,7 +167,7 @@ public sealed partial class CapacityCheckViewModel : ObservableObject
         {
             CapacityVerdict.Unknown => "لم يتم الفحص بعد",
             CapacityVerdict.Genuine => "السعة حقيقية ✓",
-            CapacityVerdict.Fake => "السعة مزيّفة ✗",
+            CapacityVerdict.Fake => "السعة مزيفة ✗",
             CapacityVerdict.Inconclusive => "نتيجة غير حاسمة",
             CapacityVerdict.Failed => "فشل الفحص",
             _ => "غير معروف"
