@@ -1,7 +1,6 @@
 <div align="center">
 
-<img src="assets/UsbDiskDoctor-Setup-v1.3.1.png" alt="banner" width="100%">
-
+<img src="assets/banner.png" alt="UsbDiskDoctor Banner" width="100%">
 # 🩺 UsbDiskDoctor 💾
 
 **طبيب أقراص USB — تشخيص، إصلاح، استرداد**
