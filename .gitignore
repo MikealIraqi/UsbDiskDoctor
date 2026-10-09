@@ -44,3 +44,7 @@ UsbDiskDoctor-v*.zip
 
 # Installer output
 publish-installer/
+
+# Executables
+*.exe
+!installer/*.iss
